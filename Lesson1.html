@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Android and Android Studio</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        
+        h1, h2, h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+
+        h1 {
+            border-bottom: 3px solid #3498db;
+        }
+
+        h2 {
+            border-bottom-style: dashed;
+        }
+
+        h3 {
+            border-bottom: none;
+            color: #e74c3c;
+        }
+        
+        .learning-objectives {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 5px solid #3498db;
+        }
+        
+        ul, ol {
+            padding-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+        }
+        
+        code {
+            background-color: #e8e8e8;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-family: "Courier New", Courier, monospace;
+        }
+
+        pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+        
+        .step {
+            counter-increment: step-counter;
+            margin-bottom: 15px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .step:before {
+            content: counter(step-counter);
+            background-color: #3498db;
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            left: -10px;
+            top: 0;
+            font-weight: bold;
+        }
+
+        .note {
+            background-color: #fcf8e3;
+            border: 1px solid #fbeed5;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Introduction to Android and Android Studio</h1>
+    <hr>
+
+    <div class="learning-objectives">
+        <h2>Learning Objectives</h2>
+        <p>Upon completion of this lesson, you will be able to:</p>
+        <ul>
+            <li>Explain the role and significance of **Android** as a mobile operating system.</li>
+            <li>Describe the key components and architecture of the Android ecosystem.</li>
+            <li>Successfully set up the **Android Studio** Integrated Development Environment (IDE) on your computer.</li>
+            <li>Differentiate between an **Android Virtual Device (AVD)** and a physical device for app testing.</li>
+            <li>Create a basic "Hello, World!" Android project from scratch using Android Studio.</li>
+            <li>Navigate the Android Studio interface and identify its main windows and tools.</li>
+        </ul>
+    </div>
+
+    <h2>Lesson Content</h2>
+
+    <h3>1. What is Android?</h3>
+    <p>Android is a Linux-based, open-source mobile operating system primarily designed for touchscreen mobile devices such as smartphones and tablets. Developed by Google and the Open Handset Alliance, it is the most widely used mobile operating system in the world. Its open-source nature allows developers to create and distribute applications for a massive global audience.</p>
+    <ul>
+        <li>**Open-Source**: The source code is publicly available, allowing for customization and a vibrant developer community.</li>
+        <li>**Versatility**: Used on a wide range of devices, including phones, tablets, smart TVs, and smartwatches.</li>
+        <li>**App Ecosystem**: The Google Play Store serves as the primary distribution channel for millions of applications.</li>
+    </ul>
+
+    <h3>2. What is Android Studio?</h3>
+    <p>Android Studio is the official Integrated Development Environment (IDE) for Android application development. It is the go-to tool for developers building apps for the Android platform. Based on IntelliJ IDEA, Android Studio provides a robust set of features specifically tailored for Android.</p>
+    <ul>
+        <li>**Code Editor**: A powerful editor with code completion, refactoring, and linting to catch errors.</li>
+        <li>**Layout Editor**: A visual designer for building user interfaces (UIs) by dragging and dropping UI components.</li>
+        <li>**Emulator**: The Android Virtual Device (AVD) manager allows you to run and test your app on virtual devices.</li>
+        <li>**Debugging Tools**: Features like the debugger, profilers, and logcat to monitor and troubleshoot your application.</li>
+        <li>**Build System**: The Gradle build system automates the process of compiling, packaging, and signing your app.</li>
+    </ul>
+
+    <h3>3. Setting Up Your Development Environment</h3>
+    <p>To begin Android development, you must first install and configure Android Studio.</p>
+    
+    <h4>Step-by-step installation process:</h4>
+    <ol>
+        <li class="step">
+            <p><strong>Download Android Studio</strong>: Go to the official Android Developer website and download the latest version of Android Studio for your operating system (Windows, macOS, or Linux).</p>
+        </li>
+        <li class="step">
+            <p><strong>Installation</strong>: Follow the on-screen instructions of the installer. This will install the core IDE and the Android SDK (Software Development Kit).</p>
+        </li>
+        <li class="step">
+            <p><strong>Initial Setup Wizard</strong>: Upon the first launch, Android Studio will guide you through a setup wizard to download essential components, including the latest SDK, system images for the emulator, and build tools. Select the default options unless you have a specific need to change them.</p>
+        </li>
+        <li class="step">
+            <p><strong>Creating a Virtual Device (AVD)</strong>:</p>
+            <ul>
+                <li>From the Android Studio welcome screen, select "More Actions" -> "Virtual Device Manager".</li>
+                <li>Click "Create Virtual Device" and choose a hardware profile (e.g., Pixel 7).</li>
+                <li>Select a system image (e.g., Android 13/Tiramisu). This is the version of Android that will run on your virtual device. Download it if you haven't already.</li>
+                <li>Give your AVD a name and click "Finish". Your emulator is now ready for use.</li>
+            </ul>
+        </li>
+    </ol>
+
+    <h3>4. Your First Android Project: "Hello, World!"</h3>
+    <p>This is the standard starting point for any new programmer. It demonstrates the basic steps of creating, running, and viewing a simple app.</p>
+
+    <h4>Step-by-step project creation:</h4>
+    <ol>
+        <li class="step">
+            <p>From the Android Studio welcome screen, select **"New Project"**.</p>
+        </li>
+        <li class="step">
+            <p>In the "New Project" dialog, choose the **"Empty Views Activity"** template.</p>
+        </li>
+        <li class="step">
+            <p>Click **"Next"**.</p>
+        </li>
+        <li class="step">
+            <p><strong>Configure your project</strong>:</p>
+            <ul>
+                <li>**Name**: <code>MyFirstApp</code></li>
+                <li>**Package name**: <code>com.example.myfirstapp</code> (this must be unique)</li>
+                <li>**Save location**: Choose a folder on your computer.</li>
+                <li>**Language**: <code>Java</code></li>
+                <li>**Minimum SDK**: Choose an API level (e.g., API 24: Android 7.0). This determines the oldest Android version your app can run on.</li>
+            </ul>
+        </li>
+        <li class="step">
+            <p>Click **"Finish"**. Android Studio will now build your project. This may take a few minutes as it downloads dependencies.</p>
+        </li>
+    </ol>
+
+    <h3>5. Navigating the Android Studio Interface</h3>
+    <p>Once the project is built, you will see the main Android Studio interface. Key windows to familiarize yourself with:</p>
+    <ul>
+        <li>**Project Window** (left pane): Shows the file structure of your project. The most important folders are:
+            <ul>
+                <li><code>app/java</code>: Contains your Java source code files.</li>
+                <li><code>app/res/layout</code>: Contains your XML layout files for the UI.</li>
+                <li><code>app/res/drawable</code>: Contains image assets.</li>
+            </ul>
+        </li>
+        <li>**Editor Window** (center): Where you write and edit your code (both Java and XML).</li>
+        <li>**Design/Split/Code View** (top-right of Editor): For XML layout files, you can switch between a visual Design view, a text-based Code view, or a Split view showing both.</li>
+        <li>**Logcat Window** (bottom): Displays system messages and logs from your app, which is crucial for debugging.</li>
+        <li>**Emulator/Device Selector** (top toolbar): A dropdown to choose which device (AVD or physical) to run your app on.</li>
+        <li>**Run Button** (green play icon, top toolbar): Builds and launches your app on the selected device.</li>
+    </ul>
+
+    <div class="note">
+        <h4>Exercise:</h4>
+        <ol>
+            <li>After creating your project, click the green "Run" button in the toolbar.</li>
+            <li>If prompted, choose the AVD you created earlier.</li>
+            <li>The emulator will launch and your app will be installed. You should see a simple screen with "Hello, World!" displayed, confirming your setup is correct.</li>
+        </ol>
+    </div>
+
+</body>
+</html>
