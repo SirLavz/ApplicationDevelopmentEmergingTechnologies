@@ -4,67 +4,137 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Application Development and Emerging Technologies</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            color: #333;
         }
-        header, footer {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 1rem;
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
         }
-        main {
-            flex-grow: 1;
-            padding: 2rem;
-            text-align: center;
-        }
-        .weeks-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 1rem;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        .week-link {
+        .week-item {
             display: block;
-            padding: 1rem;
-            border: 1px solid #ccc;
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.75rem;
+            background-color: #e2e8f0; /* light blue-gray */
             border-radius: 8px;
             text-decoration: none;
-            color: #333;
-            background-color: #f9f9f9;
-            transition: background-color 0.3s;
+            color: #1e3a8a; /* darker blue for text */
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-weight: 600;
         }
-        .week-link:hover {
-            background-color: #e9e9e9;
+        .week-item:hover {
+            background-color: #cbd5e1; /* slightly darker on hover */
+            transform: translateY(-2px);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+        .week-item span.week-number {
+            color: #4a5568; /* gray for week number */
+            font-weight: 700;
+            margin-right: 0.75rem;
+        }
+        .header-bg {
+            background-image: linear-gradient(to right, #6366f1, #8b5cf6); /* Purple gradient */
+            padding: 2.5rem 0;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            margin-top: -1.5rem; /* Adjust to extend to top of container */
+            margin-left: -1.5rem;
+            margin-right: -1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
         }
     </style>
 </head>
-<body>
-
-    <header>
-        <h1>Application Development and Emerging Technologies</h1>
-    </header>
-
-    <main>
-        <div class="weeks-container">
-            <script>
-                for (let i = 1; i <= 18; i++) {
-                    document.write(`<a href="Lesson1.html" class="week-link">Week ${i}</a>`);
-                }
-            </script>
+<body class="p-4">
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header-bg rounded-t-xl mb-6">
+            <h1 class="text-4xl font-extrabold text-white mb-2">
+                <span class="inline-block transform -rotate-6 mr-2">🌐</span> Application Development and Emerging Technologies
+            </h1>
+            <p class="text-white text-lg opacity-90">Course Guideline</p>
         </div>
-    </main>
 
-    <footer>
-        <p>2025 | RONALD T. LAVA, MSIT | Laguna University</p>
-    </footer>
+        <!-- Course Introduction -->
+        <p class="text-gray-700 mb-6 leading-relaxed">
+            Welcome to CC 3105 - Application Development And Emerging Technologies
+        <!-- Weekly Topics Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Week 1 -->
+            <a href="Week1.html" class="week-item">
+                <span class="week-number">Week 1:</span> Orientation and What is Android?
+            </a> 
+            <a href="Module1.html">Module 1</a>
+            <!-- Week 2 -->
+            <a href="Week2.html" class="week-item">
+                <span class="week-number">Week 2:</span>  
+            </a>
+            <!-- Week 3 -->
+            <a href="#week3" class="week-item">
+                <span class="week-number">Week 3:</span>  
+            </a>
+            <!-- Week 4 -->
+            <a href="#week4" class="week-item">
+                <span class="week-number">Week 4:</span>  
+            </a>
+            <!-- Week 5 -->
+            <a href="#week5" class="week-item">
+                <span class="week-number">Week 5:</span>  
+            </a>
+            <!-- Week 6 -->
+            <a href="#week6" class="week-item bg-red-200 text-red-800 hover:bg-red-300">
+                <span class="week-number">Week 6:</span> Preliminary Examination 📝
+            </a>
+            <!-- Week 7-8 -->
+            <a href="#week7-8" class="week-item col-span-1 md:col-span-2">
+                <span class="week-number">Weeks 7-8:</span>  
+            </a>
+            <!-- Week 9 -->
+            <a href="#week9" class="week-item">
+                <span class="week-number">Week 9:</span>  
+            </a>
+            <!-- Week 10 -->
+            <a href="#week10" class="week-item">
+                <span class="week-number">Week 10:</span>  
+            </a>
+            <!-- Week 11 -->
+            <a href="#week11" class="week-item">
+                <span class="week-number">Week 11:</span>  
+            </a>
+            <!-- Week 12 -->
+            <a href="#week12" class="week-item bg-red-200 text-red-800 hover:bg-red-300">
+                <span class="week-number">Week 12:</span> Midterm Examination (Hands-On/Practical) 💻
+            </a>
+            <!-- Week 13 -->
+            <a href="#week13" class="week-item">
+                <span class="week-number">Week 13:</span>  
+            </a>
+            <!-- Weeks 14-15 -->
+            <a href="#week14-15" class="week-item col-span-1 md:col-span-2">
+                <span class="week-number">Weeks 14-15:</span>  
+            <!-- Weeks 16-17 -->
+            <a href="#week16-17" class="week-item col-span-1 md:col-span-2">
+                <span class="week-number">Weeks 16-17:</span>  
+            </a>
+            <!-- Week 18 -->
+            <a href="#week18" class="week-item bg-red-200 text-red-800 hover:bg-red-300">
+                <span class="week-number">Week 18:</span> Final Examination (Hands-On/Practical) 🎓
+            </a>
+        </div>
 
+        <!-- Footer -->
+        <p class="text-center text-gray-500 text-sm mt-8">
+            <span class="inline-block transform -rotate-3 mr-1">©️</span> RONALD T. LAVA, MSIT | Laguna University - College of Computing Studies
+        </p>
+    </div>
 </body>
 </html>
