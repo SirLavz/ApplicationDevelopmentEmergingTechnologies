@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Application Development Pre-Test</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font - Inter & Georgia for certificate -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Georgia:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .loading-overlay {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .loading-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .question-page {
+            display: none; /* Hidden by default */
+        }
+        .question-page.active {
+            display: block; /* Show active page */
+        }
+        /* Style for the Certificate (content for download) */
+        .certificate-download-content {
+            display: none; /* This element is only for generating content for download, not for direct display */
+        }
+
+        /* Message Box Styling */
+        .message-box-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .message-box {
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .message-box h4 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 16px;
+            color: #333;
+        }
+        .message-box p {
+            margin-bottom: 24px;
+            color: #555;
+        }
+        .message-box button {
+            background-color: #3b82f6;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .message-box button:hover {
+            background-color: #2563eb;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col antialiased">
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Message Box Overlay -->
+    <div id="messageBoxOverlay" class="message-box-overlay">
+        <div class="message-box">
+            <h4 id="messageBoxTitle"></h4>
+            <p id="messageBoxContent"></p>
+            <button id="messageBoxCloseBtn">OK</button>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-blue-600 text-white p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold rounded-md px-3 py-1 bg-blue-700">SirLavz @ Laguna University</h1>
+            <nav>
+                <a href="#" class="text-white hover:text-blue-200 px-4 py-2 rounded-md transition duration-300">Home</a>
+                <a href="#" class="text-white hover:text-blue-200 px-4 py-2 rounded-md transition duration-300">Courses</a>
+                <a href="#" class="text-white hover:text-blue-200 px-4 py-2 rounded-md transition duration-300">Profile</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 flex-grow">
+        <div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+            <h2 class="text-3xl font-extrabold text-gray-800 mb-4 text-center">Mobile Application Development Pre-Test</h2>
+            <p class="text-gray-600 mb-8 text-center">
+                This pre-test will assess your foundational knowledge in mobile application development, with a primary focus on Android. Please answer all questions to the best of your ability.
+            </p>
+
+            <!-- Test Already Taken Message -->
+            <div id="testAlreadyTakenMessage" class="hidden bg-yellow-50 p-6 rounded-lg shadow-sm border border-yellow-200 text-center text-gray-700">
+                <p class="font-semibold text-xl mb-2">You've already completed this pre-test! 🎉</p>
+                <p>Your previous score was: <span id="previousScore" class="font-bold text-yellow-700"></span></p>
+                <p class="text-sm mt-4">You can only take this pre-test once.</p>
+            </div>
+
+            <!-- Registration Form -->
+            <div id="registrationForm" class="space-y-6 hidden">
+                <div class="bg-purple-50 p-6 rounded-lg shadow-sm border border-purple-200">
+                    <p class="font-semibold text-lg text-gray-800 mb-3">Please provide your details to start the test:</p>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="regName" class="block text-sm font-medium text-gray-700 mb-1">Full Name:</label>
+                            <input type="text" id="regName" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="e.g., Juan Dela Cruz">
+                        </div>
+                        <div>
+                            <label for="regCourse" class="block text-sm font-medium text-gray-700 mb-1">Course:</label>
+                            <input type="text" id="regCourse" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="e.g., BS Information Technology">
+                        </div>
+                        <div>
+                            <label for="regYear" class="block text-sm font-medium text-gray-700 mb-1">Year:</label>
+                            <input type="text" id="regYear" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="e.g., 3rd Year">
+                        </div>
+                        <div>
+                            <label for="regSection" class="block text-sm font-medium text-gray-700 mb-1">Section:</label>
+                            <input type="text" id="regSection" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="e.g., A">
+                        </div>
+                    </div>
+                </div>
+                <button type="button" id="startTestBtn" class="w-full bg-green-300 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transform transition duration-300 hover:scale-105">
+                    Start Test
+                </button>
+            </div>
+
+            <!-- Test Form (Initially hidden) -->
+            <form id="preTestForm" class="space-y-6 hidden">
+                <div class="sticky top-0 bg-white z-10 py-4 shadow-sm rounded-lg mb-6">
+                    <div id="timerDisplay" class="text-2xl font-bold text-red-600 text-center">
+                        30:00
+                    </div>
+                </div>
+
+                <!-- Page 1 -->
+                <div id="page-1" class="question-page active space-y-6">
+                    <!-- Question 1 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">1. What operating system is Android based on?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q1" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Windows
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q1" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> iOS
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q1" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Linux
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q1" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> macOS
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">2. When was the first official release of Android 1.0?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q2" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> November 5, 2007
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q2" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> October 2008
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q2" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> September 23, 2008
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q2" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> February 9, 2009
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">3. What is the primary programming language used for Android apps?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q3" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Python
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q3" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> C++
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q3" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Java
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q3" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Kotlin
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 4 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">4. What is the purpose of SQLite in Android?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q4" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> To manage media support
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q4" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> To handle multi-touch events
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q4" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> For data storage purposes
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q4" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> To send short message data
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 5 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">5. Which component of the Android Framework represents a single screen with a user interface?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q5" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Service
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q5" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Broadcast Receiver
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q5" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Content Provider
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q5" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Activity
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 6 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">6. What is the bottom layer of the Android architecture stack?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q6" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Libraries
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q6" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Android Runtime
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q6" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Application Framework
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q6" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Linux Kernel
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 7 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">7. What is the official Integrated Development Environment (IDE) for Android application development?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q7" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Eclipse
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q7" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Visual Studio Code
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q7" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Android Studio
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q7" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> IntelliJ IDEA
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 8 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">8. What does SDK stand for in the context of Android development?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q8" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> System Development Kit
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q8" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Software Deployment Kit
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q8" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Software Development Kit
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q8" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Source Debugging Kit
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 9 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">9. What file declares essential app information such as permissions and components?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q9" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> MainActivity.java
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q9" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> strings.xml
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q9" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> activity_main.xml
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q9" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> AndroidManifest.xml
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 10 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">10. What is the primary purpose of the `res` folder in an Android project?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q10" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> To define the app's behavior with source files.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q10" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> To handle dependencies and compile settings.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q10" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> To contain static content like layouts, images, and strings.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q10" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> To declare app permissions.
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Page 2 -->
+                <div id="page-2" class="question-page space-y-6">
+                    <!-- Question 11 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">11. In the Android Activity Lifecycle, which method is called when the system first creates the activity?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q11" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> onStart()
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q11" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> onResume()
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q11" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> onCreate()
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q11" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> onPause()
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 12 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">12. Which Android version introduced the "material design" interface?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q12" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Android 4.4 KitKat
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q12" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Android 6.0 Marshmallow
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q12" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Android 5.0 Lollipop
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q12" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Android 7.0 Nougat
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 13 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">13. What is the primary purpose of an Android Virtual Device (AVD)?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q13" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> To publish apps to the Google Play Store.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q13" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> To emulate various devices for testing applications.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q13" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> To manage database transactions for an app.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q13" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> To analyze APK file sizes.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 14 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">14. What does the `onPause()` callback indicate in the Android Activity Lifecycle?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q14" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> The activity is fully visible and interacting with the user.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q14" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> The activity is about to be destroyed permanently.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q14" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> The activity has become completely invisible to the user.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q14" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> The user is leaving the activity, but it might still be partially visible.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 15 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">15. Which of the following is considered a core component of an Android application?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q15" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Styles
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q15" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Views
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q15" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Layouts
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q15" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Service
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 16 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">16. What was a major feature of Android 1.5, Cupcake?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q16" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> The ability to operate on several different screen resolutions.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q16" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Real-time traffic information and voice-guided navigation.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q16" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Support for Bluetooth 2.1.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q16" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Third-party app widgets.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 17 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">17. Which Android version was a tablet-only release?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q17" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Donut
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q17" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Éclair
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q17" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Honeycomb
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q17" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Ice Cream Sandwich
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 18 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">18. What was the main feature introduced in Android 2.3, Gingerbread?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q18" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Support for animated GIFs.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q18" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Wi-Fi Hotspot functionality.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q18" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Introduction of gaming API for graphical intense gaming.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q18" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Ability to open up to 16 tabs in the web browser.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 19 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">19. What was the primary focus of Android 4.4, KitKat?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q19" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Redesigned UI with "material design."
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q19" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Support for fingerprint readers.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q19" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Native split-screen mode.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q19" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Better user experience, optimized to run on a larger range of old versions.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 20 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">20. What key feature was introduced with Android 5.0, Lollipop?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q20" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Support for multiple SIM cards.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q20" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Native picture-in-picture mode.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q20" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Redesigned user interface with "material design."
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q20" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Support for foldable smartphones.
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Page 3 -->
+                <div id="page-3" class="question-page space-y-6">
+                    <!-- Question 21 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">21. What does JDK stand for?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q21" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Java Development Key
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q21" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> JavaScript Design Kit
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q21" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Java Debugging Kit
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q21" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Java Development Kit
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 22 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">22. What is the recommended language for modern Android app development due to its concise syntax and safety features?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q22" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Java
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q22" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> C++
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q22" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Kotlin
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q22" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Python
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 23 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">23. Which of the following is an advantage of using Android Studio?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q23" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Low system resource consumption.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q23" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Low learning curve for beginners.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q23" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Real-time code analysis and layout visualizer.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q23" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> It is a lightweight application.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 24 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">24. What is the purpose of the Android Native Development Kit (NDK)?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q24" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> To build user interfaces.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q24" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> To manage Gradle builds.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q24" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> To build performance-critical components using C++.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q24" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> To provide support for Java.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 25 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">25. What is the entry point for an app's user interface?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q25" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Manifest File
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q25" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Resource Folder
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q25" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> MainActivity
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q25" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Layout File
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 26 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">26. Where does the `AndroidManifest.xml` file reside?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q26" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> In the `res` folder.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q26" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> In the `src` folder.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q26" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> At the root of the application project directory.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q26" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> In the `layout` folder.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 27 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">27. What is a View in Android?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q27" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> A configuration file for the application.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q27" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> A UI element that is drawn on screen, like a button.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q27" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> A message wiring components together.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q27" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> A view hierarchy that controls screen format.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 28 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">28. Which method is fired when an activity is loaded?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q28" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> onStart()
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q28" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> onResume()
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q28" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> onCreate()
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q28" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> onStop()
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 29 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">29. What is the role of the `intent-filter` tag?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q29" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> To declare the minimum SDK version.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q29" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> To indicate that the activity serves as the entry point for the app.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q29" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> To specify the application theme.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q29" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> To declare permissions.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 30 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">30. What is an Android Activity?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q30" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> A background process.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q30" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> An intent.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q30" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> A manifest file.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q30" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> A single screen with a user interface.
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Page 4 -->
+                <div id="page-4" class="question-page space-y-6">
+                    <!-- Question 31 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">31. What is the name of the lifecycle method that is called when an activity is no longer visible to the user and is about to be destroyed?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q31" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> onPause()
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q31" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> onStop()
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q31" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> onRestart()
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q31" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> onDestroy()
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 32 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">32. What does the `onPause()` callback indicate in the Android Activity Lifecycle?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q32" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> The activity is fully visible and interacting with the user.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q32" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> The activity is about to be destroyed permanently.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q32" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> The activity has become completely invisible to the user.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q32" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> The user is leaving the activity, but it might still be partially visible.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 33 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">33. What state is an activity in when the user clicks on the app icon to launch it?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q33" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Paused
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q33" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Stopped
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q33" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Resumed
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q33" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Started
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 34 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">34. What does the `onDestroy()` callback do?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q34" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> It saves user data.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q34" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> It pauses the activity.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q34" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> It releases all resources not released by earlier callbacks.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q34" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> It is the final call received before an activity is killed by the system.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 35 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">35. In the context of the Android lifecycle, when is the `onResume()` method called?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q35" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> When the activity is first launched.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q35" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> When the activity is about to be destroyed.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q35" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> When the user navigates away from the activity.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q35" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> When the activity starts interacting with the user.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 36 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">36. What does `android:icon` attribute in the manifest file typically point to?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q36" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> The application's main activity.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q36" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> The app's package name.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q36" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> The application icon located in `res/drawable-hdpi`.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q36" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> The application's version name.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 37 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">37. What is the main benefit of storing textual content in `strings.xml`?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q37" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> It makes the app run faster.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q37" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> It reduces the app's size.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q37" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> It allows for easier localization and maintenance.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q37" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> It automatically generates UI elements.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 38 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">38. Which type of resource defines a user interface layout in Android?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q38" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> anim/
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q38" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> drawable/
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q38" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> layout/
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q38" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> values/
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 39 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">39. What is the `R.java` file in an Android project?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q39" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> A manually edited file for resource declarations.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q39" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> The main activity file.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q39" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> An automatically generated file that links Java code to resources.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q39" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> The configuration file for Gradle.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 40 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">40. How would you access an image named `myimage.png` located in `res/drawable/` from your Java code?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q40" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> `myimage.getImage()`
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q40" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> `getResources().getIdentifier("myimage", "drawable", getPackageName())`
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q40" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> `R.drawable.myimage`
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q40" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> `getImage("myimage")`
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Page 5 -->
+                <div id="page-5" class="question-page space-y-6">
+                    <!-- Question 41 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">41. The system calls `onStop()` when an activity is no longer visible to the user. What happens to the Activity object in memory at this point?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q41" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> It is immediately destroyed.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q41" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> It is kept resident in memory but not attached to the window manager.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q41" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> It is moved to persistent storage.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q41" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> It is automatically relaunched in the background.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 42 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">42. When the device receives a phone call, what state does the current activity enter?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q42" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Stopped
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q42" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Destroyed
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q42" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Resumed
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q42" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Paused
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 43 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">43. What happens to an activity when the user presses the Home button?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q43" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> It is destroyed.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q43" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> It stays active and running.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q43" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> It is brought to the Stopped state.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q43" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> It enters the Paused state.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 44 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">44. According to the module, what is a common example of a process lifecycle bug related to BroadcastReceiver?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q44" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Starting an Activity from a BroadcastReceiver.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q44" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> A BroadcastReceiver that starts a thread and then returns.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q44" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Declaring a BroadcastReceiver in `AndroidManifest.xml`.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q44" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Receiving an Intent in `BroadcastReceiver.onReceive()`.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 45 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">45. What is the process state with the **lowest** likelihood of being killed by the system?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q45" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Cached process
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q45" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Service process
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q45" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Foreground process
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q45" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Visible process
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 46 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">46. What does `Service.startForeground()` allow a Service process to be treated as?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q46" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> A cached process.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q46" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> An empty process.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q46" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Something the user is aware of, or essentially as if it were visible.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q46" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> A process that can be killed at any time.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 47 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">47. Why should heavy-load shutdown operations be performed during `onStop()` rather than `onPause()`?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q47" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> `onPause()` is guaranteed to complete quickly.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q47" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> `onStop()` is always followed by `onDestroy()`.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q47" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> `onPause()` execution is very brief and may not offer enough time for save operations.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q47" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> `onStop()` is only called when the app is completely closed.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 48 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">48. What is the state of an activity when a new Activity is started on top of the current one, making the current activity invisible?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q48" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Paused
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q48" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Resumed
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q48" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Created
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q48" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Stopped
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 49 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">49. What is the purpose of the `android.os` library in Android architecture?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q49" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Provides access to the application model.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q49" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Facilitates content access and messaging.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q49" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Provides applications with access to standard operating system services.
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q49" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Used to access data published by content providers.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 50 -->
+                    <div class="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200">
+                        <p class="font-semibold text-lg text-gray-800 mb-3">50. Which Android version introduced a system-level Private Space option for sensitive apps?</p>
+                        <div class="space-y-2">
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q50" value="a" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Android 13
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q50" value="b" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Android 14
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q50" value="c" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Android 15
+                            </label>
+                            <label class="block text-gray-700">
+                                <input type="radio" name="q50" value="d" class="mr-2 rounded-full border-blue-400 text-blue-600 focus:ring-blue-500"> Android 16
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center mt-8">
+                    <button type="button" id="prevPage" class="hidden bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg shadow-md transition duration-300">
+                        Previous
+                    </button>
+                    <button type="button" id="nextPage" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300">
+                        Next
+                    </button>
+                    <button type="submit" id="submitBtn" class="hidden w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transform transition duration-300 hover:scale-105">
+                        Submit Pre-Test
+                    </button>
+                </div>
+            </form>
+
+            <!-- Certificate Section (This section is only for generating the downloadable content) -->
+            <div id="certificateSection" class="certificate-download-content">
+                <!-- Content will be dynamically generated and used for download -->
+            </div>
+
+            <!-- Results/Completion Message -->
+            <div id="results" class="mt-8 p-6 bg-green-50 rounded-lg shadow-md border border-green-200 hidden">
+                <h3 class="text-2xl font-bold text-green-800 mb-4 text-center">Pre-Test Completed!</h3>
+                <p id="completionMessage" class="text-xl text-center font-semibold text-gray-700">
+                    Your certificate has been downloaded.
+                </p>
+                <p class="text-center text-sm text-gray-500 mt-2">
+                    Please check your downloads folder for "Certificate_of_Completion_YourName.html".
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white p-4 mt-8">
+        <div class="container mx-auto text-center text-sm">
+            <p>&copy; 2025 | RONALD T. LAVA, MSIT | All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script type="module">
+        // Firebase Imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global variables provided by the Canvas environment
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        let db;
+        let auth;
+        let userId;
+        let timerInterval; // To store the timer interval ID
+        const TEST_DURATION_MINUTES = 30; // 30 minutes
+        const TOTAL_QUESTIONS = 50;
+
+        const correctAnswers = {
+            q1: 'c', q2: 'c', q3: 'c', q4: 'c', q5: 'd', q6: 'd', q7: 'c', q8: 'c', q9: 'd', q10: 'c',
+            q11: 'c', q12: 'c', q13: 'b', q14: 'd', q15: 'd', q16: 'd', q17: 'c', q18: 'c', q19: 'd', q20: 'c',
+            q21: 'd', q22: 'c', q23: 'c', q24: 'c', q25: 'c', q26: 'c', q27: 'b', q28: 'c', q29: 'b', q30: 'd',
+            q31: 'd', q32: 'd', q33: 'd', q34: 'c', q35: 'd', q36: 'c', q37: 'c', q38: 'c', q39: 'c', q40: 'c',
+            q41: 'b', q42: 'd', q43: 'c', q44: 'b', q45: 'c', q46: 'c', q47: 'c', q48: 'd', q49: 'c', q50: 'c'
+        };
+
+        // --- DOM Elements ---
+        const registrationForm = document.getElementById('registrationForm');
+        const preTestForm = document.getElementById('preTestForm');
+        const startTestBtn = document.getElementById('startTestBtn');
+        const resultsDiv = document.getElementById('results');
+        const completionMessage = document.getElementById('completionMessage');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const prevPageBtn = document.getElementById('prevPage');
+        const nextPageBtn = document.getElementById('nextPage');
+        const submitBtn = document.getElementById('submitBtn');
+        const questionPages = document.querySelectorAll('.question-page');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const testAlreadyTakenMessage = document.getElementById('testAlreadyTakenMessage');
+        const previousScoreDisplay = document.getElementById('previousScore');
+
+        // Message Box Elements
+        const messageBoxOverlay = document.getElementById('messageBoxOverlay');
+        const messageBoxTitle = document.getElementById('messageBoxTitle');
+        const messageBoxContent = document.getElementById('messageBoxContent');
+        const messageBoxCloseBtn = document.getElementById('messageBoxCloseBtn');
+
+        let currentPage = 0; // 0-indexed page number
+        const questionsPerPage = 10;
+        let userName = '';
+        let userCourse = '';
+        let userYear = '';
+        let userSection = '';
+
+        // --- Utility Functions ---
+
+        /**
+         * Displays a custom message box instead of alert().
+         * @param {string} title - The title of the message box.
+         * @param {string} message - The content message.
+         */
+        function showMessageBox(title, message) {
+            messageBoxTitle.textContent = title;
+            messageBoxContent.textContent = message;
+            messageBoxOverlay.style.display = 'flex';
+        }
+
+        /**
+         * Hides the custom message box.
+         */
+        function hideMessageBox() {
+            messageBoxOverlay.style.display = 'none';
+        }
+
+        function showLoading() {
+            loadingOverlay.classList.add('show');
+        }
+
+        function hideLoading() {
+            loadingOverlay.classList.remove('show');
+        }
+
+        /**
+         * Displays the specified page of questions and updates pagination controls.
+         * @param {number} pageNumber - The 0-indexed page number to display.
+         */
+        function showPage(pageNumber) {
+            questionPages.forEach((page, index) => {
+                if (index === pageNumber) {
+                    page.classList.add('active');
+                } else {
+                    page.classList.remove('active');
+                }
+            });
+            updatePaginationControls();
+            resultsDiv.classList.add('hidden'); // Hide results when navigating pages
+            testAlreadyTakenMessage.classList.add('hidden'); // Ensure this is hidden
+        }
+
+        /**
+         * Updates the visibility of the "Previous", "Next", and "Submit" buttons.
+         */
+        function updatePaginationControls() {
+            prevPageBtn.classList.toggle('hidden', currentPage === 0);
+            nextPageBtn.classList.toggle('hidden', currentPage === questionPages.length - 1);
+            submitBtn.classList.toggle('hidden', currentPage !== questionPages.length - 1);
+        }
+
+        /**
+         * Disables all interactive elements in the form.
+         */
+        function disableFormInputs() {
+            const inputs = preTestForm.querySelectorAll('input, button');
+            inputs.forEach(input => input.disabled = true);
+            prevPageBtn.disabled = true;
+            nextPageBtn.disabled = true;
+            submitBtn.disabled = true;
+        }
+
+        /**
+         * Calculates the score and generates/downloads the certificate.
+         * Optionally saves the score to Firestore.
+         * @param {boolean} timedOut - True if the test was submitted due to timeout.
+         */
+        async function submitTest(timedOut = false) {
+            clearInterval(timerInterval); // Stop the timer
+
+            let score = 0;
+            let allAnswered = true;
+
+            for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
+                const questionName = `q${i}`;
+                const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
+
+                if (!selectedOption) {
+                    allAnswered = false; // Mark if any question is unanswered
+                } else if (selectedOption.value === correctAnswers[questionName]) {
+                    score++;
+                }
+            }
+
+            if (!allAnswered && !timedOut) {
+                showMessageBox('Missing Answers', 'Please answer all questions before submitting the pre-test.');
+                hideLoading();
+                return; // Do not proceed with submission if not all answered and not timed out
+            }
+
+            disableFormInputs(); // Disable inputs once submitted
+
+            const percentage = (score / TOTAL_QUESTIONS) * 100;
+            const today = new Date();
+            const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = today.toLocaleDateString(undefined, dateOptions);
+
+            // Save test result to Firestore
+            try {
+                if (userId && db) { // Ensure userId and db are initialized
+                    const userDocRef = doc(db, `artifacts/${appId}/users/${userId}/preTestStatus`, 'status');
+                    await setDoc(userDocRef, {
+                        completed: true,
+                        score: score,
+                        percentage: parseFloat(percentage.toFixed(2)),
+                        timestamp: new Date(),
+                        name: userName,
+                        course: userCourse,
+                        year: userYear,
+                        section: userSection
+                    }, { merge: true }); // Use merge: true to avoid overwriting other potential fields
+                }
+            } catch (error) {
+                console.error("Error saving test result to Firestore:", error);
+                showMessageBox('Error Saving Data', 'Could not save your test results. Please try again or contact support.');
+            }
+
+            // Generate Certificate HTML content
+            const certificateHtmlContent = `
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Certificate of Completion</title>
+                    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+                    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Georgia:wght@400;700&display=swap" rel="stylesheet">
+                    <style>
+                        body { font-family: 'Inter', sans-serif; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #f0f4f8; }
+                        .certificate-container {
+                            background: linear-gradient(135deg, #f0f9ff, #cbe8f8);
+                            border: 5px solid #0056b3;
+                            padding: 40px;
+                            text-align: center;
+                            border-radius: 15px;
+                            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+                            max-width: 800px;
+                            width: 90%;
+                            margin: 20px;
+                            position: relative;
+                            overflow: hidden;
+                        }
+                        .certificate-container::before {
+                            content: '';
+                            position: absolute;
+                            top: -20px;
+                            left: -20px;
+                            right: -20px;
+                            bottom: -20px;
+                            background: url('https://placehold.co/800x600/E0F2F7/2C3E50?text=Certificate+Background') no-repeat center center;
+                            background-size: cover;
+                            opacity: 0.1;
+                            z-index: -1;
+                            filter: blur(2px);
+                        }
+                        .certificate-container h3 {
+                            font-family: 'Georgia', serif;
+                            font-size: 3rem;
+                            color: #0056b3;
+                            margin-bottom: 20px;
+                            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+                        }
+                        .certificate-container p {
+                            font-size: 1.2rem;
+                            color: #333;
+                            margin-bottom: 10px;
+                        }
+                        .certificate-container .score-details {
+                            font-size: 1.8rem;
+                            font-weight: bold;
+                            color: #007bff;
+                            margin-top: 30px;
+                            padding: 15px 0;
+                            border-top: 2px solid #a8d7ff;
+                            border-bottom: 2px solid #a8d7ff;
+                        }
+                        .certificate-container .signature {
+                            margin-top: 50px;
+                            font-style: italic;
+                            color: #555;
+                            font-size: 1.1rem;
+                        }
+                        @media (max-width: 768px) {
+                            .certificate-container h3 {
+                                font-size: 2rem;
+                            }
+                            .certificate-container .score-details {
+                                font-size: 1.3rem;
+                            }
+                            .certificate-container p {
+                                font-size: 1rem;
+                            }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="certificate-container">
+                        <h3>Certificate of Completion</h3>
+                        <p>This certifies that</p>
+                        <p class="text-3xl font-bold text-blue-700 mb-4">${userName}</p>
+                        <p>has successfully completed the</p>
+                        <p class="text-xl font-semibold text-blue-600 mb-4">Mobile Application Development Pre-Test</p>
+                        <p>on <span class="font-semibold">${formattedDate}</span></p>
+
+                        <div class="score-details">
+                            <p>Score: <span class="text-green-600">${score}</span> / <span>${TOTAL_QUESTIONS}</span></p>
+                            <p>Percentage: <span class="text-green-600">${percentage.toFixed(2)}%</span></p>
+                        </div>
+
+                        <p class="text-lg text-gray-600 mt-8">${userCourse}, ${userYear}, Section ${userSection}</p>
+                        <p class="signature">RONALD T. LAVA, MSIT</p>
+                    </div>
+                </body>
+                </html>
+            `;
+
+            // Create a Blob from the HTML content
+            const blob = new Blob([certificateHtmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+
+            // Create a temporary anchor element and trigger download
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Certificate_of_Completion_${userName.replace(/\s+/g, '_')}.html`; // Dynamic filename
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a); // Clean up the temporary element
+
+            URL.revokeObjectURL(url); // Clean up the object URL
+
+            // Display completion message
+            preTestForm.classList.add('hidden'); // Hide the test form
+            resultsDiv.classList.remove('hidden'); // Show a brief results message
+            completionMessage.innerHTML = timedOut
+                ? `Time's up! Your test has been submitted. Your certificate has been downloaded. Your score: <span class="font-semibold text-green-600">${score} / ${TOTAL_QUESTIONS} (${percentage.toFixed(2)}%)</span>`
+                : `Your certificate has been downloaded. Your score: <span class="font-semibold text-green-600">${score} / ${TOTAL_QUESTIONS} (${percentage.toFixed(2)}%)</span>`;
+
+            hideLoading(); // Hide loading indicator
+        }
+
+        /**
+         * Starts the countdown timer.
+         */
+        function startTimer() {
+            let timeLeft = TEST_DURATION_MINUTES * 60; // Convert minutes to seconds
+
+            timerInterval = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+
+                timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timerDisplay.textContent = "Time's Up!";
+                    showMessageBox('Time Expired', 'Your time for the pre-test has run out. Your answers have been automatically submitted.');
+                    submitTest(true); // Submit the test due to timeout
+                }
+                timeLeft--;
+            }, 1000);
+        }
+
+        // --- Event Listeners ---
+
+        messageBoxCloseBtn.addEventListener('click', hideMessageBox);
+
+        startTestBtn.addEventListener('click', () => {
+            userName = document.getElementById('regName').value.trim();
+            userCourse = document.getElementById('regCourse').value.trim();
+            userYear = document.getElementById('regYear').value.trim();
+            userSection = document.getElementById('regSection').value.trim();
+
+            if (userName === '' || userCourse === '' || userYear === '' || userSection === '') {
+                showMessageBox('Missing Information', 'Please fill in all registration details before starting the test.');
+                return;
+            }
+
+            registrationForm.classList.add('hidden');
+            preTestForm.classList.remove('hidden');
+            showPage(currentPage); // Show the first page of questions
+            startTimer(); // Start the timer when the test begins
+        });
+
+        prevPageBtn.addEventListener('click', () => {
+            if (currentPage > 0) {
+                currentPage--;
+                showPage(currentPage);
+            }
+        });
+
+        nextPageBtn.addEventListener('click', () => {
+            const currentQuestions = questionPages[currentPage].querySelectorAll('input[type="radio"]');
+            let allAnsweredOnPage = true;
+            const startingQNum = (currentPage * questionsPerPage) + 1;
+            for (let i = 0; i < questionsPerPage; i++) {
+                const qIndex = startingQNum + i;
+                if (qIndex <= TOTAL_QUESTIONS) { // Ensure we don't check beyond total questions
+                    const questionName = `q${qIndex}`;
+                    const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
+                    if (!selectedOption) {
+                        allAnsweredOnPage = false;
+                        break;
+                    }
+                }
+            }
+
+            if (!allAnsweredOnPage) {
+                showMessageBox('Incomplete Page', "Please answer all questions on the current page before proceeding.");
+                return;
+            }
+
+            if (currentPage < questionPages.length - 1) {
+                currentPage++;
+                showPage(currentPage);
+            }
+        });
+
+        preTestForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            showLoading(); // Show loading indicator
+            // Small delay to allow loading indicator to show before processing
+            setTimeout(() => submitTest(false), 500);
+        });
+
+        // --- Firebase Initialization and Test Status Check ---
+        document.addEventListener('DOMContentLoaded', async () => {
+            showLoading();
+            try {
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                await new Promise(resolve => {
+                    onAuthStateChanged(auth, async (user) => {
+                        if (user) {
+                            userId = user.uid;
+                        } else {
+                            // Sign in anonymously if no token is provided or invalid
+                            if (initialAuthToken) {
+                                await signInWithCustomToken(auth, initialAuthToken);
+                                userId = auth.currentUser.uid;
+                            } else {
+                                await signInAnonymously(auth);
+                                userId = auth.currentUser.uid;
+                            }
+                        }
+                        resolve();
+                    });
+                });
+
+                // Check if the user has already taken the test
+                if (userId) {
+                    const userDocRef = doc(db, `artifacts/${appId}/users/${userId}/preTestStatus`, 'status');
+                    const docSnap = await getDoc(userDocRef);
+
+                    if (docSnap.exists() && docSnap.data().completed) {
+                        const data = docSnap.data();
+                        registrationForm.classList.add('hidden');
+                        preTestForm.classList.add('hidden');
+                        testAlreadyTakenMessage.classList.remove('hidden');
+                        previousScoreDisplay.textContent = `${data.score} / ${TOTAL_QUESTIONS} (${data.percentage.toFixed(2)}%)`;
+                    } else {
+                        // Show the registration form if not completed
+                        registrationForm.classList.remove('hidden');
+                        preTestForm.classList.add('hidden'); // Ensure test form is hidden
+                    }
+                } else {
+                    // Fallback: if userId couldn't be determined, still show registration form
+                    registrationForm.classList.remove('hidden');
+                    preTestForm.classList.add('hidden');
+                    showMessageBox('Authentication Issue', 'Could not determine user ID. Please refresh the page or contact support if this persists.');
+                }
+            } catch (error) {
+                console.error("Firebase initialization or authentication error:", error);
+                showMessageBox('Initialization Error', 'Failed to initialize the application. Please check your internet connection and try again.');
+                // Even on error, show registration form as a fallback or display an error state.
+                registrationForm.classList.remove('hidden');
+                preTestForm.classList.add('hidden');
+            } finally {
+                hideLoading();
+            }
+        });
+    </script>
+</body>
+</html>
