@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Android Hello World App Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+
+    <div class="min-h-screen flex flex-col items-center py-10 px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <header class="w-full max-w-4xl bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h1 class="text-4xl font-extrabold text-center text-purple-700 mb-4">👋 Your First Android 'Hello World' App</h1>
+            <p class="text-lg text-center text-gray-600">A step-by-step guide to creating, customizing, and running a basic "Hello World" application in the latest **Android Studio Narwhal**.</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="w-full max-w-4xl bg-white rounded-xl shadow-lg p-8">
+            <section class="mb-10">
+                <h2 class="text-3xl font-bold text-purple-600 mb-6 border-b-2 border-purple-200 pb-2">🌟 What is 'Hello World'?</h2>
+                <p class="text-lg text-gray-700 mb-4">
+                    The "Hello World" program is a classic first step in learning any new programming language or platform. For Android, it's a simple application that displays the text "Hello World!" on the screen of an Android device or emulator. This guide will walk you through setting up a new project in **Android Studio Narwhal** and running this foundational app.
+                </p>
+                <p class="text-lg text-gray-700">
+                    Ensure you have <a href="https://developer.android.com/studio" target="_blank" class="text-blue-600 hover:underline">Android Studio Narwhal installed</a> and an <a href="#android_emulator_setup_guide" class="text-blue-600 hover:underline">Android Emulator set up</a> before starting this guide.
+                </p>
+            </section>
+
+            <section class="mb-10">
+                <h2 class="text-3xl font-bold text-purple-600 mb-6 border-b-2 border-purple-200 pb-2">🛠️ Creating Your 'Hello World' Project</h2>
+                <p class="text-lg text-gray-700 mb-4">
+                    Let's begin by creating a new Android Studio project for our "Hello World" app using **Android Studio Narwhal**.
+                </p>
+                <div class="p-6 bg-purple-50 rounded-lg shadow-sm">
+                    <ol class="list-decimal list-inside space-y-4 text-lg text-gray-700">
+                        <li><strong>Start a New Project:</strong>
+                            <ul class="list-disc list-inside ml-6 mt-2 space-y-2">
+                                <li>Open **Android Studio Narwhal**.</li>
+                                <li>From the **Welcome screen**: Click <code class="bg-purple-100 p-1 rounded">New Project</code>.</li>
+                                <li>From an **open project**: Go to <code class="bg-purple-100 p-1 rounded">File</code> &gt; <code class="bg-purple-100 p-1 rounded">New</code> &gt; <code class="bg-purple-100 p-1 rounded">New Project...</code>.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Choose a Project Template:</strong>
+                            <p class="mt-2">In the "New Project" wizard, select the <code class="bg-purple-100 p-1 rounded">Empty Activity</code> template for Phone and Tablet. This template provides a minimal foundation with a single screen for your app. Click <code class="bg-purple-100 p-1 rounded">Next</code>.</p>
+                            
+                        </li>
+                        <li><strong>Configure Your Project:</strong>
+                            <p class="mt-2">On the next screen, provide the following details:</p>
+                            <ul class="list-disc list-inside ml-6 mt-2 space-y-2">
+                                <li><strong>Name:</strong> Enter <code class="bg-purple-100 p-1 rounded">MyHelloWorldApp</code> (or any other name you prefer).</li>
+                                <li><strong>Package name:</strong> This will be automatically generated based on your name (e.g., <code class="bg-purple-100 p-1 rounded">com.example.myhelloworldapp</code>).</li>
+                                <li><strong>Save location:</strong> Choose a directory on your computer where you want to save your project files.</li>
+                                <li><strong>Language:</strong> Select <code class="bg-purple-100 p-1 rounded">Kotlin</code> (the modern, recommended language for Android development) or <code class="bg-purple-100 p-1 rounded">Java</code>.</li>
+                                <li><strong>Minimum SDK:</strong> Choose a reasonable minimum API level (e.g., API 21 for Android 5.0 Lollipop) to ensure your app runs on a wide range of devices.</li>
+                            </ul>
+                            <p class="mt-2">Click <code class="bg-purple-100 p-1 rounded">Finish</code>. **Android Studio Narwhal** will now set up your project, download necessary dependencies, and build your initial project, which may take a few moments depending on your internet speed.</p>
+                            
+                        </li>
+                    </ol>
+                </div>
+            </section>
+
+            <section class="mb-10">
+                <h2 class="text-3xl font-bold text-purple-600 mb-6 border-b-2 border-purple-200 pb-2">✏️ Exploring and Customizing the Layout</h2>
+                <p class="text-lg text-gray-700 mb-4">
+                    Your app's user interface is defined in XML layout files. For our "Hello World" app, the primary layout is `activity_main.xml`.
+                </p>
+                <div class="p-6 bg-purple-50 rounded-lg shadow-sm">
+                    <ol class="list-decimal list-inside space-y-4 text-lg text-gray-700">
+                        <li><strong>Navigate to the Layout File:</strong>
+                            <p class="mt-2">Once the project loads in **Android Studio Narwhal**, expand the project hierarchy in the "Project" window (usually on the left side) and navigate to: <code class="bg-purple-100 p-1 rounded">app</code> &gt; <code class="bg-purple-100 p-1 rounded">res</code> &gt; <code class="bg-purple-100 p-1 rounded">layout</code> &gt; <code class="bg-purple-100 p-1 rounded">activity_main.xml</code>.</p>
+                        </li>
+                        <li><strong>Understand the Default Layout:</strong>
+                            <p class="mt-2">When you open <code class="bg-purple-100 p-1 rounded">activity_main.xml</code>, **Android Studio Narwhal** will open it in the Design editor. You'll likely see a <code class="bg-purple-100 p-1 rounded">TextView</code> element centrally placed with the text "Hello World!". This is the default UI provided by the <code class="bg-purple-100 p-1 rounded">Empty Activity</code> template.</p>
+                            <p class="mt-2">You can switch between **Code**, **Split** (Code and Design), and **Design** views using the tabs at the top right of the editor window. In the `Code` view, you'll see the XML that defines this layout. It should look something like this:</p>
+                            <pre class="bg-gray-100 p-3 rounded mt-2 text-sm text-gray-800"><code>&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"&gt;
+
+    &lt;TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        android:textSize="24sp"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" /&gt;
+
+&lt;/androidx.constraintlayout.widget.ConstraintLayout&gt;</code></pre>
+                            <p class="mt-2">We've added <code class="bg-purple-100 p-1 rounded">android:textSize="24sp"</code> and <code class="bg-purple-100 p-1 rounded">android:textColor="@android:color/black"</code> to make the text more prominent.</p>
+                            
+                        </li>
+                        <li><strong>(Optional) Change the Text:</strong>
+                            <p class="mt-2">If you want to change the text, you can directly edit the <code class="bg-purple-100 p-1 rounded">android:text="Hello World!"</code> attribute in the XML to something else, for example: <code class="bg-purple-100 p-1 rounded">android:text="Greetings from Gemini!"</code>.</p>
+                        </li>
+                    </ol>
+                </div>
+            </section>
+
+            <section class="mb-10">
+                <h2 class="text-3xl font-bold text-purple-600 mb-6 border-b-2 border-purple-200 pb-2">▶️ Running Your App on an Emulator</h2>
+                <p class="text-lg text-gray-700 mb-4">
+                    Now that your app's layout is ready, let's run it on the Android emulator you've previously set up using **Android Studio Narwhal**.
+                </p>
+                <div class="p-6 bg-purple-50 rounded-lg shadow-sm">
+                    <ol class="list-decimal list-inside space-y-4 text-lg text-gray-700">
+                        <li><strong>Ensure Your Emulator is Running:</strong>
+                            <p class="mt-2">Make sure your Android emulator (AVD) is already launched and running. If not, open the **Device Manager** (AVD Manager) in **Android Studio Narwhal** and click the ▶ (Play) button next to your desired AVD.</p>
+                        </li>
+                        <li><strong>Select the Target Device:</strong>
+                            <p class="mt-2">In the **Android Studio Narwhal** toolbar, there's a dropdown menu showing available devices. Your running emulator should appear here. Select it as your target device.</p>
+                            
+                        </li>
+                        <li><strong>Run the Application:</strong>
+                            <p class="mt-2">Click the **▶ (Run 'app')** button (a green triangle icon) in the **Android Studio Narwhal** toolbar. Android Studio will now compile your application, install it on the selected emulator, and launch it.</p>
+                            
+                        </li>
+                    </ol>
+                </div>
+                <p class="text-lg text-gray-700 mt-4">
+                    You should now see your "MyHelloWorldApp" running on the emulator, displaying "Hello World!" (or your custom message) on the screen. Congratulations, you've successfully created and run your first Android application using **Android Studio Narwhal**! 🎉
+                </p>
+            </section>
+
+            <section>
+                <h2 class="text-3xl font-bold text-purple-600 mb-6 border-b-2 border-purple-200 pb-2">✨ What's Next?</h2>
+                <p class="text-lg text-gray-700 mt-4">
+                    You've taken the first exciting step into Android development! From here, you can explore adding more UI elements, handling user interactions, and diving into the Java or Kotlin code that powers your app.
+                </p>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="w-full max-w-4xl mt-8 text-center text-gray-500 text-sm">
+            &copy; SirLavz2025 | RONALD T. LAVA, MSIT | COLLEGE OF COMPUTING STUDIES | LAGUNA UNIVERSITY.
+        </footer>
+    </div>
+
+</body>
+</html>

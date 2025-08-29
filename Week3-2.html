@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Android Emulator Setup Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+
+    <div class="min-h-screen flex flex-col items-center py-10 px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <header class="w-full max-w-4xl bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h1 class="text-4xl font-extrabold text-center text-blue-700 mb-4">📱 Android Emulator Setup Guide</h1>
+            <p class="text-lg text-center text-gray-600">A comprehensive guide to creating and configuring Android Virtual Devices (AVDs) in Android Studio for seamless app testing.</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="w-full max-w-4xl bg-white rounded-xl shadow-lg p-8">
+            <section class="mb-10">
+                <h2 class="text-3xl font-bold text-blue-600 mb-6 border-b-2 border-blue-200 pb-2">🌟 Why Use an Android Emulator?</h2>
+                <p class="text-lg text-gray-700 mb-4">
+                    An **Android Virtual Device (AVD)** is an emulator configuration that allows you to simulate a real Android device on your computer. Emulators are indispensable tools for Android developers because they provide a controlled environment to test applications across various Android versions, screen sizes, and hardware configurations without requiring a physical device. This helps in catching bugs early and ensuring your app performs consistently for all users.
+                </p>
+                <p class="text-lg text-gray-700">
+                    Before proceeding, ensure you have <a href="https://developer.android.com/studio" target="_blank" class="text-blue-600 hover:underline">Android Studio installed</a> and the necessary Android SDK Platform-Tools and Platform components are set up via the SDK Manager.
+                </p>
+            </section>
+
+            <section class="mb-10">
+                <h2 class="text-3xl font-bold text-blue-600 mb-6 border-b-2 border-blue-200 pb-2">🛠️ Steps to Create and Configure an AVD</h2>
+                <p class="text-lg text-gray-700 mb-4">
+                    Follow these steps within Android Studio to create your first Android Virtual Device:
+                </p>
+                <div class="p-6 bg-blue-50 rounded-lg shadow-sm">
+                    <ol class="list-decimal list-inside space-y-4 text-lg text-gray-700">
+                        <li><strong>Open AVD Manager (Device Manager):</strong>
+                            <ul class="list-disc list-inside ml-6 mt-2 space-y-2">
+                                <li>From the **Android Studio Welcome screen**: Click on <code class="bg-blue-100 p-1 rounded">Configure</code> &gt; <code class="bg-blue-100 p-1 rounded">AVD Manager</code>.</li>
+                                <li>From an **open project**: Click on the <code class="bg-blue-100 p-1 rounded">Device Manager</code> icon in the toolbar (it looks like a mobile phone with a play button), or go to <code class="bg-blue-100 p-1 rounded">Tools</code> &gt; <code class="bg-blue-100 p-1 rounded">Device Manager</code>.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Create New Virtual Device:</strong> In the AVD Manager (or Device Manager) window, locate and click the <code class="bg-blue-100 p-1 rounded">Create Virtual Device</code> button. This will launch the "Virtual Device Configuration" wizard.</li>
+                        <li><strong>Select Hardware Profile:</strong> From the list of device definitions, choose a **Hardware Profile** that closely matches the device you want to emulate (e.g., "Pixel 7" or "Nexus 5X"). This choice determines the screen size, resolution, and other physical characteristics of your virtual device. Click <code class="bg-blue-100 p-1 rounded">Next</code>.</li>
+                        <li><strong>Select System Image:</strong> Now, you need to select a **System Image** (the Android operating system version) for your AVD.
+                            <ul class="list-disc list-inside ml-6 mt-2 space-y-2">
+                                <li>If you haven't downloaded a system image for a specific API level, you'll see a "Download" link next to it. Click to download the desired image.</li>
+                                <li>It's highly recommended to choose an image that includes **"Google Play"** services if your app relies on them.</li>
+                                <li>Once downloaded, select the system image and click <code class="bg-blue-100 p-1 rounded">Next</code>.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Configure AVD Properties:</strong> On this screen, you can customize your AVD:
+                            <ul class="list-disc list-inside ml-6 mt-2 space-y-2">
+                                <li><strong>AVD Name:</strong> Give your AVD a descriptive name (e.g., "Pixel_7_API_34").</li>
+                                <li><strong>Startup Orientation:</strong> Choose between "Portrait" or "Landscape" as the default.</li>
+                                <li><strong>Performance (Graphics):</strong> For optimal performance, set "Graphics" to <code class="bg-blue-100 p-1 rounded">Hardware - GLES 2.0</code>.</li>
+                                <li><strong>Internal Storage:</strong> Adjust the amount of internal storage if needed.</li>
+                                <li>Review other advanced settings if you have specific requirements.</li>
+                            </ul>
+                            Once satisfied, click <code class="bg-blue-100 p-1 rounded">Finish</code>.
+                        </li>
+                        <li><strong>Launch Emulator:</strong> Your newly created AVD will now appear in the AVD Manager list. To start the emulator, click the **▶ (Play)** button next to its name. The emulator will boot up, simulating an Android device.</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-3xl font-bold text-blue-600 mb-6 border-b-2 border-blue-200 pb-2">🚀 Optimizing Emulator Performance</h2>
+                <p class="text-lg text-gray-700 mb-4">
+                    For a smoother development experience, consider these tips to optimize your emulator's performance:
+                </p>
+                <ul class="list-disc list-inside space-y-2 text-lg text-gray-700">
+                    <li>**HAXM/Hypervisor:** Ensure that hardware acceleration is enabled on your system (Intel HAXM for Intel processors on Windows/macOS, or KVM for Linux). This significantly speeds up the emulator.</li>
+                    <li>**Allocate Sufficient RAM:** In the AVD configuration, ensure your emulator has enough RAM allocated (e.g., 2GB or more, depending on your system's resources).</li>
+                    <li>**SSD Storage:** Running Android Studio and your AVDs from an SSD will provide much faster load times.</li>
+                    <li>**Close Unnecessary Apps:** Free up system resources by closing other demanding applications while running the emulator.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2 class="text-3xl font-bold text-blue-600 mb-6 border-b-2 border-blue-200 pb-2">✅ Running Your App on the Emulator</h2>
+                <p class="text-lg text-gray-700 mt-4">
+                    With your emulator set up and running, you can now deploy and test your Android applications. In Android Studio, when you click the "Run" button, your active emulator should appear as a target device. Select it, and your app will be installed and launched on the virtual device! Happy testing! 🎉
+                </p>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="w-full max-w-4xl mt-8 text-center text-gray-500 text-sm">
+            &copy; <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Android Emulator Setup Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+
+    <div class="min-h-screen flex flex-col items-center py-10 px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <header class="w-full max-w-4xl bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h1 class="text-4xl font-extrabold text-center text-blue-700 mb-4">📱 Android Emulator Setup Guide</h1>
+            <p class="text-lg text-center text-gray-600">A comprehensive guide to creating and configuring Android Virtual Devices (AVDs) in Android Studio for seamless app testing.</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="w-full max-w-4xl bg-white rounded-xl shadow-lg p-8">
+            <section class="mb-10">
+                <h2 class="text-3xl font-bold text-blue-600 mb-6 border-b-2 border-blue-200 pb-2">🌟 Why Use an Android Emulator?</h2>
+                <p class="text-lg text-gray-700 mb-4">
+                    An **Android Virtual Device (AVD)** is an emulator configuration that allows you to simulate a real Android device on your computer. Emulators are indispensable tools for Android developers because they provide a controlled environment to test applications across various Android versions, screen sizes, and hardware configurations without requiring a physical device. This helps in catching bugs early and ensuring your app performs consistently for all users.
+                </p>
+                <p class="text-lg text-gray-700">
+                    Before proceeding, ensure you have <a href="https://developer.android.com/studio" target="_blank" class="text-blue-600 hover:underline">Android Studio installed</a> and the necessary Android SDK Platform-Tools and Platform components are set up via the SDK Manager.
+                </p>
+            </section>
+
+            <section class="mb-10">
+                <h2 class="text-3xl font-bold text-blue-600 mb-6 border-b-2 border-blue-200 pb-2">🛠️ Steps to Create and Configure an AVD</h2>
+                <p class="text-lg text-gray-700 mb-4">
+                    Follow these steps within Android Studio to create your first Android Virtual Device:
+                </p>
+                <div class="p-6 bg-blue-50 rounded-lg shadow-sm">
+                    <ol class="list-decimal list-inside space-y-4 text-lg text-gray-700">
+                        <li><strong>Open AVD Manager (Device Manager):</strong>
+                            <ul class="list-disc list-inside ml-6 mt-2 space-y-2">
+                                <li>From the **Android Studio Welcome screen**: Click on <code class="bg-blue-100 p-1 rounded">Configure</code> &gt; <code class="bg-blue-100 p-1 rounded">AVD Manager</code>.</li>
+                                <li>From an **open project**: Click on the <code class="bg-blue-100 p-1 rounded">Device Manager</code> icon in the toolbar (it looks like a mobile phone with a play button), or go to <code class="bg-blue-100 p-1 rounded">Tools</code> &gt; <code class="bg-blue-100 p-1 rounded">Device Manager</code>.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Create New Virtual Device:</strong> In the AVD Manager (or Device Manager) window, locate and click the <code class="bg-blue-100 p-1 rounded">Create Virtual Device</code> button. This will launch the "Virtual Device Configuration" wizard.</li>
+                        <li><strong>Select Hardware Profile:</strong> From the list of device definitions, choose a **Hardware Profile** that closely matches the device you want to emulate (e.g., "Pixel 7" or "Nexus 5X"). This choice determines the screen size, resolution, and other physical characteristics of your virtual device. Click <code class="bg-blue-100 p-1 rounded">Next</code>.</li>
+                        <li><strong>Select System Image:</strong> Now, you need to select a **System Image** (the Android operating system version) for your AVD.
+                            <ul class="list-disc list-inside ml-6 mt-2 space-y-2">
+                                <li>If you haven't downloaded a system image for a specific API level, you'll see a "Download" link next to it. Click to download the desired image.</li>
+                                <li>It's highly recommended to choose an image that includes **"Google Play"** services if your app relies on them.</li>
+                                <li>Once downloaded, select the system image and click <code class="bg-blue-100 p-1 rounded">Next</code>.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Configure AVD Properties:</strong> On this screen, you can customize your AVD:
+                            <ul class="list-disc list-inside ml-6 mt-2 space-y-2">
+                                <li><strong>AVD Name:</strong> Give your AVD a descriptive name (e.g., "Pixel_7_API_34").</li>
+                                <li><strong>Startup Orientation:</strong> Choose between "Portrait" or "Landscape" as the default.</li>
+                                <li><strong>Performance (Graphics):</strong> For optimal performance, set "Graphics" to <code class="bg-blue-100 p-1 rounded">Hardware - GLES 2.0</code>.</li>
+                                <li><strong>Internal Storage:</strong> Adjust the amount of internal storage if needed.</li>
+                                <li>Review other advanced settings if you have specific requirements.</li>
+                            </ul>
+                            Once satisfied, click <code class="bg-blue-100 p-1 rounded">Finish</code>.
+                        </li>
+                        <li><strong>Launch Emulator:</strong> Your newly created AVD will now appear in the AVD Manager list. To start the emulator, click the **▶ (Play)** button next to its name. The emulator will boot up, simulating an Android device.</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-3xl font-bold text-blue-600 mb-6 border-b-2 border-blue-200 pb-2">🚀 Optimizing Emulator Performance</h2>
+                <p class="text-lg text-gray-700 mb-4">
+                    For a smoother development experience, consider these tips to optimize your emulator's performance:
+                </p>
+                <ul class="list-disc list-inside space-y-2 text-lg text-gray-700">
+                    <li>**HAXM/Hypervisor:** Ensure that hardware acceleration is enabled on your system (Intel HAXM for Intel processors on Windows/macOS, or KVM for Linux). This significantly speeds up the emulator.</li>
+                    <li>**Allocate Sufficient RAM:** In the AVD configuration, ensure your emulator has enough RAM allocated (e.g., 2GB or more, depending on your system's resources).</li>
+                    <li>**SSD Storage:** Running Android Studio and your AVDs from an SSD will provide much faster load times.</li>
+                    <li>**Close Unnecessary Apps:** Free up system resources by closing other demanding applications while running the emulator.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2 class="text-3xl font-bold text-blue-600 mb-6 border-b-2 border-blue-200 pb-2">✅ Running Your App on the Emulator</h2>
+                <p class="text-lg text-gray-700 mt-4">
+                    With your emulator set up and running, you can now deploy and test your Android applications. In Android Studio, when you click the "Run" button, your active emulator should appear as a target device. Select it, and your app will be installed and launched on the virtual device! Happy testing! 🎉
+                </p>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="w-full max-w-4xl mt-8 text-center text-gray-500 text-sm">
+            &copy; SirLavz2025 | RONALD T. LAVA, MSIT | COLLEGE OF COMPUTING STUDIES | LAGUNA UNIVERSITY.
+        </footer>
+    </div>
+
+</body>
+</html>
+        </footer>
+    </div>
+
+</body>
+</html>

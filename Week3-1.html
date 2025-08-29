@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Android SDK Installation Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+
+    <div class="min-h-screen flex flex-col items-center py-10 px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <header class="w-full max-w-4xl bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h1 class="text-4xl font-extrabold text-center text-emerald-700 mb-4">Android SDK Installation Guide</h1>
+            <p class="text-lg text-center text-gray-600">Installing the Android SDK within Android Studio for mobile development.</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="w-full max-w-4xl bg-white rounded-xl shadow-lg p-8">
+            <section class="mb-10">
+                <h2 class="text-3xl font-bold text-emerald-600 mb-6 border-b-2 border-emerald-200 pb-2">🚀 Getting Started: What is the Android SDK?</h2>
+                <p class="text-lg text-gray-700 mb-4">
+                    The **Android Software Development Kit (SDK)** is a collection of development tools used to develop applications for the Android platform. It includes essential components like the Android Debug Bridge (ADB), various Android platform versions, system images for emulators, and more. Android Studio, the official IDE for Android development, bundles a version of the SDK, but you often need to manage and install additional components or different API levels.
+                </p>
+            </section>
+
+            <section class="mb-10">
+                <h2 class="text-3xl font-bold text-emerald-600 mb-6 border-b-2 border-emerald-200 pb-2">🛠️ Installing Android Studio (if not already installed)</h2>
+                <p class="text-lg text-gray-700 mb-4">
+                    Before you can install the Android SDK, you'll need Android Studio itself. If you haven't installed it yet, follow these steps:
+                </p>
+                <ol class="list-decimal list-inside space-y-3 text-lg text-gray-700">
+                    <li>Visit the official <a href="https://developer.android.com/studio" target="_blank" class="text-blue-600 hover:underline">Android Studio download page</a>.</li>
+                    <li>Download the appropriate installer for your operating system (Windows, macOS, or Linux).</li>
+                    <li>Run the installer and follow the on-screen instructions. Android Studio will typically prompt you to install a default set of SDK components during its initial setup.</li>
+                </ol>
+            </section>
+
+            <section class="mb-10">
+                <h2 class="text-3xl font-bold text-emerald-600 mb-6 border-b-2 border-emerald-200 pb-2">⚙️ Installing the Android SDK in Android Studio</h2>
+                <p class="text-lg text-gray-700 mb-4">
+                    Once Android Studio is installed, you can manage and install different versions of the Android SDK.
+                </p>
+                <div class="p-6 bg-emerald-50 rounded-lg shadow-sm">
+                    <h3 class="text-2xl font-semibold text-emerald-700 mb-4">Steps to Install/Manage SDK Components:</h3>
+                    <ol class="list-decimal list-inside space-y-3 text-lg text-gray-700">
+                        <li><strong>Open Android Studio:</strong> Launch Android Studio.</li>
+                        <li><strong>Access SDK Manager:</strong>
+                            <ul class="list-disc list-inside ml-6 mt-2 space-y-2">
+                                <li>From the Welcome screen: Click on <code class="bg-emerald-100 p-1 rounded">Configure</code> &gt; <code class="bg-emerald-100 p-1 rounded">SDK Manager</code>.</li>
+                                <li>From an open project: Go to <code class="bg-emerald-100 p-1 rounded">File</code> &gt; <code class="bg-emerald-100 p-1 rounded">Settings</code> (Windows/Linux) or <code class="bg-emerald-100 p-1 rounded">Android Studio</code> &gt; <code class="bg-emerald-100 p-1 rounded">Preferences</code> (macOS). Then navigate to <code class="bg-emerald-100 p-1 rounded">Appearance & Behavior</code> &gt; <code class="bg-emerald-100 p-1 rounded">System Settings</code> &gt; <code class="bg-emerald-100 p-1 rounded">Android SDK</code>.</li>
+                            </ul>
+                        </li>
+                        <li><strong>SDK Platforms Tab:</strong> In the SDK Manager, select the <code class="bg-emerald-100 p-1 rounded">SDK Platforms</code> tab.
+                            <ul class="list-disc list-inside ml-6 mt-2 space-y-2">
+                                <li>Here, you'll see a list of Android versions (API Levels). Check the boxes next to the versions you want to install. It's recommended to install at least one stable version and perhaps the latest.</li>
+                                <li>You can also click "Show Package Details" to select specific components for each platform, such as `Google APIs`, `Sources for Android SDK`, etc.</li>
+                            </ul>
+                        </li>
+                        <li><strong>SDK Tools Tab:</strong> Switch to the <code class="bg-emerald-100 p-1 rounded">SDK Tools</code> tab.
+                            <ul class="list-disc list-inside ml-6 mt-2 space-y-2">
+                                <li>Ensure that <code class="bg-emerald-100 p-1 rounded">Android SDK Build-Tools</code>, <code class="bg-emerald-100 p-1 rounded">Android SDK Platform-Tools</code> (which includes ADB), and `Android SDK Command-line Tools` are checked.</li>
+                                <li>You might also want to install `Google Play services` (if you plan to use Google services in your apps) and any `Intel x86 Emulator Accelerator (HAXM installer)` or `Android Emulator` components for faster emulator performance.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Apply Changes:</strong> Click <code class="bg-emerald-100 p-1 rounded">Apply</code> or <code class="bg-emerald-100 p-1 rounded">OK</code>. Android Studio will download and install the selected components. This may take some time depending on your internet connection and selections.</li>
+                        <li><strong>Accept Licenses:</strong> You might be prompted to accept license agreements during the installation process.</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-3xl font-bold text-emerald-600 mb-6 border-b-2 border-emerald-200 pb-2">✅ Verifying SDK Installation</h2>
+                <p class="text-lg text-gray-700 mb-4">
+                    After the installation is complete, you can verify your SDK setup:
+                </p>
+                <ul class="list-disc list-inside space-y-2 text-lg text-gray-700">
+                    <li>Re-open the SDK Manager and check that the desired components show as "Installed".</li>
+                    <li>You can also check the SDK path, typically found at the top of the `Android SDK` settings page (e.g., <code class="bg-gray-100 p-1 rounded">C:\Users\&lt;YourUser&gt;\AppData\Local\Android\Sdk</code> on Windows, or <code class="bg-gray-100 p-1 rounded">~/Library/Android/sdk</code> on macOS).</li>
+                    <li>Try creating a new Android project; Android Studio should automatically configure it to use the installed SDK components.</li>
+                </ul>
+                <p class="text-lg text-gray-700 mt-4">
+                    You're now ready to start developing Android applications! Happy coding! 📱
+                </p>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="w-full max-w-4xl mt-8 text-center text-gray-500 text-sm">
+            &copy; SirLavz2025 | RONALD T. LAVA, MSIT | COLLEGE OF COMPUTING STUDIES | LAGUNA UNIVERSITY.
+        </footer>
+    </div>
+
+</body>
+</html>

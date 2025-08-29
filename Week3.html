@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JDK Installation Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+
+    <div class="min-h-screen flex flex-col items-center py-10 px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <header class="w-full max-w-4xl bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h1 class="text-4xl font-extrabold text-center text-indigo-700 mb-4">JDK Installation Guide</h1>
+            <p class="text-lg text-center text-gray-600">Week 3 - Downloading and installing the Java Development Kit (JDK) on Windows, macOS, and Linux.</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="w-full max-w-4xl bg-white rounded-xl shadow-lg p-8">
+            <section class="mb-10">
+                <h2 class="text-3xl font-bold text-indigo-600 mb-6 border-b-2 border-indigo-200 pb-2">📥 Downloading the JDK</h2>
+                <ol class="list-decimal list-inside space-y-4 text-lg text-gray-700">
+                    <li>Visit the official <a href="https://www.oracle.com/java/technologies/downloads/" target="_blank" class="text-blue-600 hover:underline">Oracle Java website</a> or <a href="https://openjdk.org/install/" target="_blank" class="text-blue-600 hover:underline">OpenJDK website</a>.</li>
+                    <li>Choose the appropriate installer for your operating system:
+                        <ul class="list-disc list-inside ml-6 mt-2 space-y-2">
+                            <li><strong>Windows:</strong> Look for a <code class="bg-gray-100 p-1 rounded">.exe</code> or <code class="bg-gray-100 p-1 rounded">.msi</code> installer file.</li>
+                            <li><strong>macOS:</strong> Select a <code class="bg-gray-100 p-1 rounded">.dmg</code> or <code class="bg-gray-100 p-1 rounded">.pkg</code> file.</li>
+                            <li><strong>Linux:</strong> Download a <code class="bg-gray-100 p-1 rounded">.tar.gz</code> (compressed archive), <code class="bg-gray-100 p-1 rounded">.deb</code> (for Debian/Ubuntu), or <code class="bg-gray-100 p-1 rounded">.rpm</code> (for Fedora/CentOS) file.</li>
+                        </ul>
+                    </li>
+                    <li>Accept the license agreement if prompted and download the file.</li>
+                </ol>
+            </section>
+
+            <section class="mb-10">
+                <h2 class="text-3xl font-bold text-indigo-600 mb-6 border-b-2 border-indigo-200 pb-2">💻 Installation Steps by Operating System</h2>
+
+                <!-- Windows Section -->
+                <div class="mb-8 p-6 bg-indigo-50 rounded-lg shadow-sm">
+                    <h3 class="text-2xl font-semibold text-indigo-700 mb-4">Windows</h3>
+                    <ol class="list-decimal list-inside space-y-3 text-lg text-gray-700">
+                        <li>Locate the downloaded <code class="bg-indigo-100 p-1 rounded">.exe</code> or <code class="bg-indigo-100 p-1 rounded">.msi</code> file and double-click to run the installer.</li>
+                        <li>Follow the prompts in the installation wizard. It's generally safe to accept the default installation path, which is typically <code class="bg-indigo-100 p-1 rounded">C:\Program Files\Java\jdk-&lt;version&gt;</code>.</li>
+                        <li>Once the installation is complete, you will need to set up environment variables.
+                            <ul class="list-disc list-inside ml-6 mt-2 space-y-2">
+                                <li>Search for <strong>"Environment Variables"</strong> in the Windows search bar and open the <strong>"Edit the system environment variables"</strong> window.</li>
+                                <li>Click the <strong>"Environment Variables..."</strong> button.</li>
+                                <li>Under <strong>"System variables"</strong>, find the <code class="bg-indigo-100 p-1 rounded">Path</code> variable and click <strong>"Edit"</strong>.</li>
+                                <li>Click <strong>"New"</strong> and add the path to your JDK's <code class="bg-indigo-100 p-1 rounded">bin</code> directory (e.g., <code class="bg-indigo-100 p-1 rounded">C:\Program Files\Java\jdk-&lt;version&gt;\bin</code>).</li>
+                                <li>Click <strong>"OK"</strong> on all windows to save the changes.</li>
+                                <li>Optionally, you can also create a new <code class="bg-indigo-100 p-1 rounded">JAVA_HOME</code> variable with the value set to the JDK installation directory (e.g., <code class="bg-indigo-100 p-1 rounded">C:\Program Files\Java\jdk-&lt;version&gt;</code>).</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+
+                <!-- macOS Section -->
+                <div class="mb-8 p-6 bg-green-50 rounded-lg shadow-sm">
+                    <h3 class="text-2xl font-semibold text-green-700 mb-4">macOS</h3>
+                    <ol class="list-decimal list-inside space-y-3 text-lg text-gray-700">
+                        <li>Locate the downloaded <code class="bg-green-100 p-1 rounded">.dmg</code> file and double-click it.</li>
+                        <li>Drag the JDK icon into the <code class="bg-green-100 p-1 rounded">Applications</code> folder, or if it's a <code class="bg-green-100 p-1 rounded">.pkg</code> installer, double-click it and follow the on-screen instructions. The JDK is typically installed in <code class="bg-green-100 p-1 rounded">/Library/Java/JavaVirtualMachines/</code>.</li>
+                        <li>Open <strong>Terminal</strong> and set the <code class="bg-green-100 p-1 rounded">JAVA_HOME</code> environment variable by editing your shell's configuration file (<code class="bg-green-100 p-1 rounded">.zshrc</code> for Zsh or <code class="bg-green-100 p-1 rounded">.bash_profile</code> for Bash).
+                            <ul class="list-disc list-inside ml-6 mt-2 space-y-2">
+                                <li>Type <code class="bg-green-100 p-1 rounded">nano ~/.zshrc</code> (or <code class="bg-green-100 p-1 rounded">nano ~/.bash_profile</code>) to open the file in a text editor.</li>
+                                <li>Add the following lines to the end of the file:
+                                    <pre class="bg-gray-100 p-3 rounded mt-2 text-sm text-gray-800"><code>export JAVA_HOME=$(/usr/libexec/java_home)
+export PATH="$JAVA_HOME/bin:$PATH"</code></pre>
+                                </li>
+                                <li>Save and exit the editor, then reload the configuration by running <code class="bg-green-100 p-1 rounded">source ~/.zshrc</code> (or <code class="bg-green-100 p-1 rounded">source ~/.bash_profile</code>).</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+
+                <!-- Linux Section -->
+                <div class="mb-8 p-6 bg-yellow-50 rounded-lg shadow-sm">
+                    <h3 class="text-2xl font-semibold text-yellow-700 mb-4">Linux</h3>
+                    <p class="text-lg text-gray-700 mb-3">The easiest way is to use your distribution's package manager:</p>
+                    <ul class="list-disc list-inside space-y-2 text-lg text-gray-700 mb-4">
+                        <li><strong>Ubuntu/Debian:</strong> <code class="bg-yellow-100 p-1 rounded">sudo apt update && sudo apt install default-jdk</code></li>
+                        <li><strong>Fedora/CentOS:</strong> <code class="bg-yellow-100 p-1 rounded">sudo dnf install java-latest-openjdk-devel</code></li>
+                    </ul>
+                    <p class="text-lg text-gray-700 mb-3">After installation, you may need to set the <code class="bg-yellow-100 p-1 rounded">JAVA_HOME</code> and <code class="bg-yellow-100 p-1 rounded">PATH</code> environment variables:</p>
+                    <ol class="list-decimal list-inside space-y-3 text-lg text-gray-700">
+                        <li>Open your shell's configuration file (<code class="bg-yellow-100 p-1 rounded">~/.bashrc</code> or <code class="bg-yellow-100 p-1 rounded">~/.zshrc</code>) and add these lines:
+                            <pre class="bg-gray-100 p-3 rounded mt-2 text-sm text-gray-800"><code>export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
+export PATH=$JAVA_HOME/bin:$PATH</code></pre>
+                        </li>
+                        <li>Save, exit, and reload the configuration with <code class="bg-yellow-100 p-1 rounded">source ~/.bashrc</code> (or <code class="bg-yellow-100 p-1 rounded">source ~/.zshrc</code>).</li>
+                    </ol>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-3xl font-bold text-indigo-600 mb-6 border-b-2 border-indigo-200 pb-2">✅ Verifying the Installation</h2>
+                <p class="text-lg text-gray-700 mb-4">
+                    After completing the installation, open a new terminal or Command Prompt and run the following commands to ensure that the JDK is installed and configured correctly:
+                </p>
+                <ul class="list-disc list-inside space-y-2 text-lg text-gray-700">
+                    <li><code class="bg-gray-100 p-1 rounded">java -version</code></li>
+                    <li><code class="bg-gray-100 p-1 rounded">javac -version</code></li>
+                </ul>
+                <p class="text-lg text-gray-700 mt-4">
+                    Both commands should display the installed Java version number without any errors. If they do, your JDK setup is complete! Congratulations! 🎉
+                </p>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="w-full max-w-4xl mt-8 text-center text-gray-500 text-sm">
+            &copy; SirLavz2025 | RONALD T. LAVA, MSIT | COLLEGE OF COMPUTING STUDIES | LAGUNA UNIVERSITY.
+        </footer>
+    </div>
+
+</body>
+</html>
