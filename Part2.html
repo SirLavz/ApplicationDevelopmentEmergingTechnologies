@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java Logic Discussion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            @apply bg-gray-100 text-gray-800;
+        }
+        pre {
+            @apply bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6 md:p-10">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-blue-700">Part 2: The Logic - Java Code</h1>
+        </header>
+
+        <section class="mb-8">
+            <p class="text-gray-700 leading-relaxed mb-4">
+                The Java code in `MainActivity.java` is where the app's behavior is defined. It's the engine behind the user interface, handling events and performing actions based on user input. The code's primary role is to connect to the UI elements from the XML file and execute logic when a button is clicked.
+            </p>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">The Code</h2>
+            <p class="text-gray-700 leading-relaxed mb-4">
+                This code demonstrates how to set up an event listener to respond to a button click. The core logic is a simple `if-else` statement that checks for a hardcoded username and password. A `Toast` message provides quick feedback to the user on the result of the login attempt.
+            </p>
+            <pre><code>package com.example.yourapp;
+
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+
+    // Declare UI elements as member variables
+    private EditText usernameEditText;
+    private EditText passwordEditText;
+    private Button loginButton;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Set the content view to the XML layout file
+        setContentView(R.layout.activity_main);
+
+        // Initialize UI elements by finding them by their ID from the XML layout
+        usernameEditText = findViewById(R.id.editTextUsername);
+        passwordEditText = findViewById(R.id.editTextPassword);
+        loginButton = findViewById(R.id.buttonLogin);
+
+        // Set an OnClickListener for the login button
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get the text from the EditText fields
+                String username = usernameEditText.getText().toString();
+                String password = passwordEditText.getText().toString();
+
+                // Simple login logic using hardcoded values
+                // In a real application, you would check against a database or API
+                if (username.equals("admin") && password.equals("password123")) {
+                    // Login successful
+                    Toast.makeText(MainActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
+                    // You could add code here to navigate to another activity
+                } else {
+                    // Login failed
+                    Toast.makeText(MainActivity.this, "Invalid username or password.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+}
+</code></pre>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">Key Concepts Explained</h2>
+            <ul class="list-disc list-inside text-gray-700 space-y-2">
+                <li><strong class="font-bold">`findViewById()`</strong>: This method is how the Java code "grabs" a specific UI element from the XML layout using its ID.</li>
+                <li><strong class="font-bold">`setOnClickListener()`</strong>: This is an **event listener**. It tells the program to wait for a specific action (a click on the button) and then execute the code inside its `onClick` method.</li>
+                <li><strong class="font-bold">`Toast`</strong>: A small pop-up notification used to provide simple, non-intrusive feedback to the user.</li>
+                <li><strong class="font-bold">`onCreate()`</strong>: This is a lifecycle method that is called when the activity is first created. All the initial setup for your app, like linking the UI and setting up listeners, happens here.</li>
+            </ul>
+        </section>
+        <div class="text-center mt-8">
+            <a href="CC3105_Act1_Homepage.html" class="inline-block bg-gray-500 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">
+                ← Back to Main Page
+            </a>
+        </div>
+    </div>
+     <footer class="text-center mt-8 text-gray-500 text-sm">
+        <p>SirLavz2025 | RONALD T. LAVA, MSIT | College of Computing Studies | LAGUNA UNIVERSITY</p>
+    </footer>
+</body>
+</html>

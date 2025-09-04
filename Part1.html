@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XML Layout Discussion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            @apply bg-gray-100 text-gray-800;
+        }
+        pre {
+            @apply bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6 md:p-10">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-blue-700">Part 1: The User Interface (UI) - XML Layout</h1>
+        </header>
+
+        <section class="mb-8">
+            <p class="text-gray-700 leading-relaxed mb-4">
+                The user interface is defined in an **XML** file, which serves as a blueprint for the screen's layout. This file describes what elements appear on the screen and how they are arranged. It’s important to understand that XML is a markup language, not a programming language, so it's all about structure and visual attributes.
+            </p>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">The Code</h2>
+            <p class="text-gray-700 leading-relaxed mb-4">
+                Below is the code for the `activity_main.xml` file. It's built around a `<LinearLayout>` which acts as the main container. This layout arranges all the views vertically, making it simple to place a title, two input fields, and a button.
+            </p>
+            <pre><code>&lt;?xml version="1.0" encoding="utf-8"?>
+&lt;LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp"
+    tools:context=".MainActivity">
+
+    &lt;!-- Title of the activity -->
+    &lt;TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="User Login"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="32dp" />
+
+    &lt;!-- Input field for the username -->
+    &lt;EditText
+        android:id="@+id/editTextUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Username"
+        android:inputType="text"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/rounded_edittext" />
+
+    &lt;!-- Input field for the password -->
+    &lt;EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:padding="12dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/rounded_edittext" />
+
+    &lt;!-- Login button -->
+    &lt;Button
+        android:id="@+id/buttonLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:padding="12dp"
+        android:backgroundTint="#007BFF"
+        android:textColor="#FFFFFF" />
+
+&lt;/LinearLayout>
+</code></pre>
+        </section>
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold text-blue-600 mb-4">Key Attributes Explained</h2>
+            <p class="text-gray-700 leading-relaxed mb-4">
+                Each element has a set of attributes that control its appearance and behavior. Here are some of the most important ones:
+            </p>
+            <ul class="list-disc list-inside text-gray-700 space-y-2">
+                <li><strong class="font-bold">`android:id`</strong>: A unique identifier for each view. This is how the Java code finds and interacts with the UI elements.</li>
+                <li><strong class="font-bold">`android:layout_width` & `android:layout_height`</strong>: These define the size of the view. `match_parent` means the view will expand to fill the size of its parent container.</li>
+                <li><strong class="font-bold">`android:text`</strong>: Sets the text for a `TextView` or `Button`.</li>
+                <li><strong class="font-bold">`android:hint`</strong>: Provides a placeholder text inside an empty input field, like "Username" or "Password."</li>
+                <li><strong class="font-bold">`android:inputType`</strong>: Specifies the type of data the user should enter. Using `textPassword` for the password field automatically hides the characters as the user types.</li>
+            </ul>
+        </section>
+        <div class="text-center mt-8">
+            <a href="CC3105_Act1_Homepage.html" class="inline-block bg-gray-500 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">
+                ← Back to Main Page
+            </a>
+        </div>
+    </div>
+     <footer class="text-center mt-8 text-gray-500 text-sm">
+        <p>SirLavz2025 | RONALD T. LAVA, MSIT | College of Computing Studies | LAGUNA UNIVERSITY</p>
+    </footer>
+</body>
+</html>
