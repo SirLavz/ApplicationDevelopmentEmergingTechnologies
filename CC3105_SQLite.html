@@ -1,0 +1,201 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQLite Tutorial: CRUD Operations in Android Studio (Java)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            padding-top: 4rem; /* pt-16 */
+            padding-bottom: 3rem; /* pb-12 */
+        }
+        .code-block {
+            background-color: #e0f2fe; /* light blue-100 */
+            border-left: 5px solid #0369a1; /* sky-700 */
+            color: #1f2937; /* gray-800 */
+            overflow-x: auto;
+        }
+        .step-card {
+            border-left: 5px solid #10b981; /* emerald-500 */
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800 bg-gray-50">
+
+    <div class="header fixed top-0 left-0 w-full bg-blue-600 text-white p-3 shadow-lg z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h4 class="text-lg font-semibold tracking-wider">CC 3105: SQLite Integration Tutorial</h4>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-4xl font-extrabold text-blue-800 pt-6 pb-2 border-b-2 border-gray-200 mb-6">SQLite Database: CRUD Operations in Android (Java)</h1>
+
+        <div class="bg-indigo-100 border-l-4 border-indigo-500 text-indigo-700 p-4 mb-8" role="alert">
+            <p class="font-bold">Prerequisite:</p>
+            <p>This tutorial uses the **`SQLiteOpenHelper`** class and **Java** to implement local database storage in Android Studio.</p>
+        </div>
+
+        <h2 class="text-2xl font-bold text-green-700 mb-4 border-b pb-1">Phase 1: Database Setup and Creation (The Helper Class)</h2>
+
+        <p class="mb-4">All core database logic is contained in a custom class that extends `SQLiteOpenHelper`. This class handles the actual creation of the database file and its tables.</p>
+
+        <div class="step-card bg-white shadow-md p-5 mb-6">
+            <h3 class="text-xl font-bold text-emerald-600 mb-2">Step 1: Create the `DatabaseHelper.java` Class</h3>
+            <p class="mb-3">Create a new Java class (e.g., `DatabaseHelper`) and make it extend `SQLiteOpenHelper`. Define constants for the database name, version, table name, and columns.</p>
+            <div class="code-block p-4 rounded-md">
+                <pre class="whitespace-pre-wrap font-mono text-xs sm:text-sm"><code>import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+public class DatabaseHelper extends SQLiteOpenHelper {
+
+    // Database constants
+    public static final String DATABASE_NAME = "StudentDB.db";
+    public static final int DATABASE_VERSION = 1;
+    public static final String TABLE_NAME = "student_table";
+    public static final String COL_1 = "ID";
+    public static final String COL_2 = "NAME";
+    public static final String COL_3 = "MARKS";
+
+    // SQL statement to create the table
+    private static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
+        COL_1 + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+        COL_2 + " TEXT," +
+        COL_3 + " INTEGER" +
+        ")";
+
+    public DatabaseHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    // This method runs ONLY when the database file is first created
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(CREATE_TABLE);
+    }
+
+    // This method runs when DATABASE_VERSION is incremented
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(db);
+    }
+}</code></pre>
+            </div>
+        </div>
+
+        <h2 class="text-2xl font-bold text-green-700 mb-4 border-b pb-1">Phase 2: Implementing CRUD Operations (C - Create/Insert)</h2>
+
+        <div class="step-card bg-white shadow-md p-5 mb-6">
+            <h3 class="text-xl font-bold text-emerald-600 mb-2">Step 2: Create the `insertData()` Method</h3>
+            <p class="mb-3">This method uses the `ContentValues` class to package data and the `insert()` method of `SQLiteDatabase` to add a new row.</p>
+            <div class="code-block p-4 rounded-md">
+                <pre class="whitespace-pre-wrap font-mono text-xs sm:text-sm"><code>// Add this method to the DatabaseHelper class
+
+public boolean insertData(String name, String marks) {
+    SQLiteDatabase db = this.getWritableDatabase(); // Get write access
+    ContentValues contentValues = new ContentValues();
+    
+    // Put data into the map (Key = Column Name, Value = Data)
+    contentValues.put(COL_2, name);
+    contentValues.put(COL_3, marks);
+
+    // Insert the row. Returns -1 if it failed, or the ID of the row if successful
+    long result = db.insert(TABLE_NAME, null, contentValues);
+    
+    return result != -1;
+}</code></pre>
+            </div>
+        </div>
+
+        <h2 class="text-2xl font-bold text-green-700 mb-4 border-b pb-1">Phase 3: Implementing CRUD Operations (R - Read/Retrieve)</h2>
+
+        <div class="step-card bg-white shadow-md p-5 mb-6">
+            <h3 class="text-xl font-bold text-emerald-600 mb-2">Step 3: Create the `getAllData()` Method</h3>
+            <p class="mb-3">The `query()` or `rawQuery()` method returns a **`Cursor`** object, which points to the result set. We must iterate through the Cursor to retrieve data.</p>
+            <div class="code-block p-4 rounded-md">
+                <pre class="whitespace-pre-wrap font-mono text-xs sm:text-sm"><code>// Add this method to the DatabaseHelper class
+
+import android.database.Cursor;
+
+public Cursor getAllData() {
+    SQLiteDatabase db = this.getWritableDatabase();
+    // rawQuery allows you to run a direct SQL SELECT statement
+    Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+    return res;
+}</code></pre>
+            </div>
+            <p class="text-sm mt-3 font-semibold text-gray-700">Retrieving the Data (In your Activity):</p>
+            <div class="code-block p-4 rounded-md mt-2">
+                <pre class="whitespace-pre-wrap font-mono text-xs sm:text-sm"><code>DatabaseHelper myDb = new DatabaseHelper(this); // Instance
+Cursor res = myDb.getAllData();
+
+if (res.getCount() == 0) {
+    // Handle case where no data is returned
+    Toast.makeText(this, "No Records Found", Toast.LENGTH_SHORT).show();
+    return;
+}
+
+// Iterate through the results
+StringBuffer buffer = new StringBuffer();
+while (res.moveToNext()) {
+    // Column Index: 0=ID, 1=NAME, 2=MARKS (as defined in CREATE_TABLE)
+    buffer.append("ID: " + res.getString(0) + "\n");
+    buffer.append("Name: " + res.getString(1) + "\n");
+    buffer.append("Marks: " + res.getString(2) + "\n\n");
+}
+res.close(); // IMPORTANT: Close the cursor to free resources
+// Display buffer.toString() in an AlertDialog or TextView</code></pre>
+            </div>
+        </div>
+
+        <h2 class="text-2xl font-bold text-green-700 mb-4 border-b pb-1">Phase 4: Implementing CRUD Operations (U & D - Update/Delete)</h2>
+
+        <div class="step-card bg-white shadow-md p-5 mb-6">
+            <h3 class="text-xl font-bold text-emerald-600 mb-2">Step 4: Create `updateData()` and `deleteData()`</h3>
+            <p class="mb-3">These methods use the `update()` and `delete()` helper functions, which require a `WHERE` clause and a value array (`whereArgs`) to specify which row(s) to affect.</p>
+            <div class="code-block p-4 rounded-md">
+                <pre class="whitespace-pre-wrap font-mono text-xs sm:text-sm"><code>// Add this method to the DatabaseHelper class
+
+public boolean updateData(String id, String name, String marks) {
+    SQLiteDatabase db = this.getWritableDatabase();
+    ContentValues contentValues = new ContentValues();
+    contentValues.put(COL_1, id);
+    contentValues.put(COL_2, name);
+    contentValues.put(COL_3, marks);
+    
+    // Update data where ID matches the input ID
+    db.update(TABLE_NAME, contentValues, "ID = ?", new String[] { id });
+    return true; // Simple confirmation
+}
+
+public Integer deleteData(String id) {
+    SQLiteDatabase db = this.getWritableDatabase();
+    
+    // Delete data where ID matches the input ID
+    // Returns the number of rows deleted
+    return db.delete(TABLE_NAME, "ID = ?", new String[] { id });
+}</code></pre>
+            </div>
+        </div>
+
+        <h2 class="text-2xl font-bold text-green-700 mb-4 border-b pb-1">Summary and Best Practice</h2>
+
+        <ul class="list-disc list-inside space-y-2 ml-4 mb-6">
+            <li>Always subclass **`SQLiteOpenHelper`** to manage database lifecycle.</li>
+            <li>Use **`ContentValues`** for Insert and Update operations for safety and ease.</li>
+            <li>Use a **`Cursor`** to retrieve results from any Read operation.</li>
+            <li>**Always close the `Cursor`** after you are finished reading data (`res.close();`).</li>
+            <li>When performing database operations in the Activity, ensure you handle exceptions and check return values (e.g., `result != -1` for insert, `res.getCount() == 0` for read).</li>
+        </ul>
+
+    </div>
+
+    <div class="footer fixed bottom-0 left-0 w-full bg-gray-200 text-gray-700 p-2 border-t border-gray-300 text-xs text-center z-50">
+        @SirLavz2025 | RONALD T. LAVA, MSIT | COLLEGE OF COMPUTING STUDIES | LAGUNA UNIVERSITY
+    </div>
+
+</body>
+</html>

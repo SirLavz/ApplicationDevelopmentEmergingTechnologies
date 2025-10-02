@@ -1,0 +1,305 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 6: Android Data Storage and Persistence (Java Lecture Notes)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /*
+        To ensure the main content doesn't get covered by fixed header/footer,
+        we apply padding to the body equivalent to their height.
+        Header height approx: 40px (p-3)
+        Footer height approx: 32px (p-2)
+        Total vertical margin adjusted from default to accommodate fixed elements.
+        */
+        body {
+            padding-top: 4rem; /* pt-16 */
+            padding-bottom: 3rem; /* pb-12 */
+        }
+        /* Custom styling for the "code-block" for visual differentiation */
+        .code-block {
+            background-color: #e0f2fe; /* light blue-100 */
+            border-left: 5px solid #0369a1; /* sky-700 */
+            color: #1f2937; /* gray-800 */
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800 bg-gray-50">
+
+    <div class="header fixed top-0 left-0 w-full bg-blue-600 text-white p-3 shadow-lg z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h4 class="text-lg font-semibold tracking-wider">CC 3105 APPLICATION DEVELOPMENT AND EMERGING TECHNOLOGY</h4>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-4xl font-extrabold text-blue-800 pt-6 pb-2 border-b-2 border-gray-200 mb-6">Module 6: Android Data Storage and Persistence <span class="text-lg text-gray-500">(Java Revision)</span></h1>
+
+        <div class="overflow-x-auto shadow-md sm:rounded-lg mb-8">
+            <table class="w-full text-left text-sm text-gray-600">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-200">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">Topic</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="bg-white border-b hover:bg-gray-100">
+                        <td class="px-6 py-4 font-bold">Introduction & Learning Outcomes</td></tr>
+                    <tr class="bg-gray-50 border-b hover:bg-gray-100">
+                        <td class="px-6 py-4 font-bold">Lesson 1. Shared Preferences (Key-Value Pairs)</td></tr>
+                    <tr class="bg-white border-b hover:bg-gray-100">
+                        <td class="px-6 py-4 font-bold">Lesson 2. Internal Storage (File I/O)</td></tr>
+                    <tr class="bg-gray-50 border-b hover:bg-gray-100">
+                        <td class="px-6 py-4 font-bold">Lesson 3. SQLite Database with SQLiteOpenHelper</td></tr>
+                    <tr class="bg-white border-b hover:bg-gray-100">
+                        <td class="px-6 py-4 font-bold">Summary & Assessment Task</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2 class="text-2xl font-bold text-green-700 mb-4 border-b pb-1">Introduction & Learning Outcomes</h2>
+
+        <p class="mb-4">Data persistence is crucial for modern applications. This module covers three fundamental, local data storage options in Android (using Java): storing small key-value data, simple files, and structured relational data.</p>
+
+        <h3 class="text-xl font-semibold text-red-600 mt-4">Learning Outcomes</h3>
+        <ul class="list-disc list-inside space-y-1 ml-4 mb-6">
+            <li>Choose the appropriate storage solution based on data size and complexity (Preferences, Files, or Database).</li>
+            <li>Implement read and write operations using **SharedPreferences** for user settings.</li>
+            <li>Perform basic **Internal Storage** File I/O operations (read/write).</li>
+            <li>Set up and manage an SQLite database using the **`SQLiteOpenHelper`** class for CRUD operations.</li>
+        </ul>
+
+        <h2 class="text-2xl font-bold text-green-700 mb-4 border-b pb-1">Lesson 1. Shared Preferences (Key-Value Pairs)</h2>
+
+        <h3 class="text-xl font-semibold text-red-600 mt-4">Overview</h3>
+        <ul class="list-disc list-inside space-y-1 ml-4 mb-3">
+            <li>Used for storing small, primitive data types (booleans, ints, strings, floats, longs) in private XML files.</li>
+            <li>Ideal for user settings, app configuration flags, or small pieces of state (e.g., "first run" flag).</li>
+            <li>Data is accessible only by the application that created it (using `MODE_PRIVATE`).</li>
+        </ul>
+
+        <h3 class="text-xl font-semibold text-red-600 mt-4">Java Implementation: Save Data</h3>
+        <div class="code-block p-4 rounded-md mb-6">
+            <pre class="whitespace-pre-wrap font-mono text-sm"><code>// 1. Get the SharedPreferences object (using a unique file name)
+SharedPreferences sharedPref = getSharedPreferences(
+    "MyPrefsFile", Context.MODE_PRIVATE);
+
+// 2. Get an Editor to modify the preferences
+SharedPreferences.Editor editor = sharedPref.edit();
+
+// 3. Put the key-value pairs
+editor.putString("username", "JohnDoe");
+editor.putBoolean("is_logged_in", true);
+
+// 4. Apply changes asynchronously (commit() is synchronous)
+editor.apply();</code></pre>
+        </div>
+
+        <h3 class="text-xl font-semibold text-red-600 mt-4">Java Implementation: Retrieve Data</h3>
+        <div class="code-block p-4 rounded-md mb-6">
+            <pre class="whitespace-pre-wrap font-mono text-sm"><code>// 1. Get the SharedPreferences object (must match the save file name)
+SharedPreferences sharedPref = getSharedPreferences(
+    "MyPrefsFile", Context.MODE_PRIVATE);
+
+// 2. Retrieve data with a default value
+String savedUsername = sharedPref.getString("username", "Guest");
+boolean isLoggedIn = sharedPref.getBoolean("is_logged_in", false);
+
+// Example usage
+if (isLoggedIn) {
+    // ...
+}</code></pre>
+        </div>
+
+        <h2 class="text-2xl font-bold text-green-700 mb-4 border-b pb-1">Lesson 2. Internal Storage (File I/O)</h2>
+
+        <h3 class="text-xl font-semibold text-red-600 mt-4">Overview</h3>
+        <ul class="list-disc list-inside space-y-1 ml-4 mb-3">
+            <li>Used for storing larger, private files like images, raw text, or serialized data objects.</li>
+            <li>Files are saved in a private directory inside the device's internal memory.</li>
+            <li>**No permissions** are required for accessing internal storage.</li>
+            <li>Files are deleted when the user uninstalls the app.</li>
+        </ul>
+
+        <h3 class="text-xl font-semibold text-red-600 mt-4">Java Implementation: Write File</h3>
+        <div class="code-block p-4 rounded-md mb-6">
+            <pre class="whitespace-pre-wrap font-mono text-sm"><code>String filename = "my_notes.txt";
+String fileContents = "This is a secret note.";
+FileOutputStream fos = null;
+
+try {
+    // openFileOutput() gets the internal "files" directory
+    fos = openFileOutput(filename, Context.MODE_PRIVATE);
+    fos.write(fileContents.getBytes());
+    Toast.makeText(this, "Saved to " + getFilesDir() + "/" + filename,
+                   Toast.LENGTH_LONG).show();
+} catch (IOException e) {
+    e.printStackTrace();
+} finally {
+    if (fos != null) {
+        try {
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+        </div>
+
+        <h3 class="text-xl font-semibold text-red-600 mt-4">Java Implementation: Read File</h3>
+        <div class="code-block p-4 rounded-md mb-6">
+            <pre class="whitespace-pre-wrap font-mono text-sm"><code>String filename = "my_notes.txt";
+FileInputStream fis = null;
+
+try {
+    fis = openFileInput(filename);
+    InputStreamReader isr = new InputStreamReader(fis);
+    BufferedReader br = new BufferedReader(isr);
+    StringBuilder sb = new StringBuilder();
+    String text;
+
+    while ((text = br.readLine()) != null) {
+        sb.append(text).append("\n");
+    }
+    // Result is in sb.toString()
+    Toast.makeText(this, "Read: " + sb.toString(),
+                   Toast.LENGTH_LONG).show();
+} catch (FileNotFoundException e) {
+    e.printStackTrace(); // File not found is common on first run
+} catch (IOException e) {
+    e.printStackTrace();
+}</code></pre>
+        </div>
+
+        <h2 class="text-2xl font-bold text-green-700 mb-4 border-b pb-1">Lesson 3. SQLite Database with SQLiteOpenHelper</h2>
+
+        <h3 class="text-xl font-semibold text-red-600 mt-4">Overview</h3>
+        <ul class="list-disc list-inside space-y-1 ml-4 mb-3">
+            <li>Used for structured data that requires tables, relationships, and complex queries (CRUD operations).</li>
+            <li>SQLite is the database engine built into Android.</li>
+            <li>**`SQLiteOpenHelper`** is the standard class for managing database creation, versioning, and upgrades.</li>
+        </ul>
+
+        <h3 class="text-xl font-semibold text-red-600 mt-4">The `SQLiteOpenHelper` Subclass (Core Logic)</h3>
+        <p class="mb-2">You must override the `onCreate()` and `onUpgrade()` methods.</p>
+        <div class="code-block p-4 rounded-md mb-6">
+            <pre class="whitespace-pre-wrap font-mono text-sm"><code>public class DatabaseHelper extends SQLiteOpenHelper {
+    private static final String DATABASE_NAME = "users.db";
+    private static final int DATABASE_VERSION = 1;
+    private static final String TABLE_NAME = "user_table";
+    // SQL query to create the table
+    private static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
+        " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        "NAME TEXT, EMAIL TEXT)";
+
+    public DatabaseHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        // Execute the table creation SQL
+        db.execSQL(CREATE_TABLE);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // Called when DATABASE_VERSION is incremented
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(db);
+    }
+    
+    // Custom method to insert data
+    public boolean insertData(String name, String email) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("NAME", name);
+        contentValues.put("EMAIL", email);
+        long result = db.insert(TABLE_NAME, null, contentValues);
+        // If data is inserted incorrectly it will return -1
+        return result != -1;
+    }
+}</code></pre>
+        </div>
+
+        <h3 class="text-xl font-semibold text-red-600 mt-4">Java Implementation: Usage in Activity (Insert)</h3>
+        <div class="code-block p-4 rounded-md mb-6">
+            <pre class="whitespace-pre-wrap font-mono text-sm"><code>// Inside an Activity or Fragment
+DatabaseHelper myDb = new DatabaseHelper(this);
+
+// In a button's onClickListener:
+boolean isInserted = myDb.insertData("Alice", "alice@example.com");
+
+if (isInserted) {
+    Toast.makeText(this, "Data Inserted", Toast.LENGTH_SHORT).show();
+} else {
+    Toast.makeText(this, "Data NOT Inserted", Toast.LENGTH_SHORT).show();
+}</code></pre>
+        </div>
+        
+        <h3 class="text-xl font-semibold text-red-600 mt-4">Java Implementation: Usage in Activity (Retrieve/Query)</h3>
+        <div class="code-block p-4 rounded-md mb-6">
+            <pre class="whitespace-pre-wrap font-mono text-sm"><code>// Add a method to your DatabaseHelper to view data
+public Cursor getAllData() {
+    SQLiteDatabase db = this.getWritableDatabase();
+    Cursor res = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+    return res;
+}
+
+// In the Activity to call the method:
+Cursor res = myDb.getAllData();
+if (res.getCount() == 0) {
+    Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
+    return;
+}
+
+StringBuilder buffer = new StringBuilder();
+while (res.moveToNext()) {
+    buffer.append("ID: " + res.getString(0) + "\n");
+    buffer.append("Name: " + res.getString(1) + "\n");
+    buffer.append("Email: " + res.getString(2) + "\n\n");
+}
+// Use buffer.toString() to display data (e.g., in an AlertDialog or TextView)</code></pre>
+        </div>
+
+
+        <hr class="my-6">
+
+        <h2 class="text-2xl font-bold text-green-700 mb-4 border-b pb-1">Summary & Assessment Task</h2>
+
+        <h3 class="text-xl font-semibold text-red-600 mt-4">Summary of Storage Options</h3>
+        <div class="overflow-x-auto shadow-sm sm:rounded-lg mb-6">
+            <table class="w-full text-left text-sm text-gray-700">
+                <thead class="text-xs text-gray-500 uppercase bg-gray-100">
+                    <tr><th>Method</th><th>Data Type</th><th>Access</th><th>Use Case</th></tr>
+                </thead>
+                <tbody>
+                    <tr class="bg-white border-b"><td><strong>SharedPreferences</strong></td><td>Primitive (Small, key-value)</td><td>Private</td><td>User settings, app flags</td></tr>
+                    <tr class="bg-gray-50 border-b"><td><strong>Internal Storage</strong></td><td>Files (Text, Images)</td><td>Private</td><td>Large, app-specific data (cached images)</td></tr>
+                    <tr class="bg-white"><td><strong>SQLite</strong></td><td>Structured (Tables, relations)</td><td>Private</td><td>Complex inventory, user profiles, logs</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="text-xl font-semibold text-red-600 mt-4">Assessment Task</h3>
+
+        <p class="mb-4"><strong>Task:</strong> Create an Android application to manage a simple task list using SQLite.</p>
+        <p><strong>Requirements:</strong></p>
+        <ol class="list-decimal list-inside ml-6 space-y-1 mb-4">
+            <li>Create an **`SQLiteOpenHelper`** subclass named `TaskDatabaseHelper`.</li>
+            <li>The database should contain one table: `tasks` with columns: `ID` (Primary Key), `TASK_NAME` (Text), and `IS_COMPLETED` (Integer).</li>
+            <li>In your `MainActivity`, implement an **`insertTask()`** method that uses your `TaskDatabaseHelper` to add a new task.</li>
+            <li>Implement a **`viewAllTasks()`** method that retrieves all task names and displays them in a single **TextView** or a **Toast** message.</li>
+        </ol>
+
+        <hr class="my-6">
+
+    </div>
+
+    <div class="footer fixed bottom-0 left-0 w-full bg-gray-200 text-gray-700 p-2 border-t border-gray-300 text-xs text-center z-50">
+        @SirLavz2025 | RONALD T. LAVA, MSIT | COLLEGE OF COMPUTING STUDIES | LAGUNA UNIVERSITY
+    </div>
+
+</body>
+</html>
