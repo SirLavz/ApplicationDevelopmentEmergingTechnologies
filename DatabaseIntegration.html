@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CC 3105 – Android Login App with MySQL</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; background-color: #f9f9f9; color: #333; }
+    h1, h2, h3 { color: #005a9c; }
+    pre { background-color: #eee; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    footer { margin-top: 40px; font-size: 0.9em; color: #666; border-top: 1px solid #ccc; padding-top: 10px; }
+    .section { margin-bottom: 30px; }
+  </style>
+</head>
+<body>
+
+  <h1>CC 3105 – Application Development and Emerging Technology</h1>
+  <h2>Module: Remote Database Integration via PHP and Retrofit</h2>
+  <p><strong>Instructor:</strong> Ronald T. Lava, MSIT<br>
+     <strong>Institution:</strong> College of Computing Studies, Laguna University</p>
+
+  <div class="section">
+    <h3>🧩 Learning Objectives</h3>
+    <ul>
+      <li>Connect Android apps to a remote MySQL database using Retrofit.</li>
+      <li>Implement a secure login system using PHP and MySQL.</li>
+      <li>Understand client-server architecture in mobile development.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>🛠️ Part 1: Backend Setup (PHP + MySQL)</h3>
+    <h4>Step 1: Create MySQL Database</h4>
+    <pre>
+CREATE DATABASE login_demo;
+USE login_demo;
+
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(50) NOT NULL,
+  password VARCHAR(255) NOT NULL
+);
+
+INSERT INTO users (username, password) VALUES ('admin', 'admin123');
+    </pre>
+
+    <h4>Step 2: PHP API (login.php)</h4>
+    <pre>
+&lt;?php
+header('Content-Type: application/json');
+$conn = new mysqli("localhost", "root", "", "login_demo");
+
+$username = $_POST['username'];
+$password = $_POST['password'];
+
+$stmt = $conn-&gt;prepare("SELECT * FROM users WHERE username=? AND password=?");
+$stmt-&gt;bind_param("ss", $username, $password);
+$stmt-&gt;execute();
+$result = $stmt-&gt;get_result();
+
+echo json_encode([
+  "message" =&gt; $result-&gt;num_rows &gt; 0 ? "Login successful" : "Invalid credentials"
+]);
+?&gt;
+    </pre>
+  </div>
+
+  <div class="section">
+    <h3>📱 Part 2: Android App Setup</h3>
+    <h4>Step 1: Add Dependencies</h4>
+    <pre>
+implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    </pre>
+
+    <h4>Step 2: Design UI (activity_main.xml)</h4>
+    <pre>
+&lt;LinearLayout ...&gt;
+  &lt;EditText android:id="@+id/username" hint="Username" ... /&gt;
+  &lt;EditText android:id="@+id/password" hint="Password" ... /&gt;
+  &lt;Button android:id="@+id/loginBtn" android:text="Login" ... /&gt;
+  &lt;TextView android:id="@+id/resultText" ... /&gt;
+&lt;/LinearLayout&gt;
+    </pre>
+
+    <h4>Step 3: Create Model (LoginResponse.java)</h4>
+    <pre>
+public class LoginResponse {
+  private String message;
+  public String getMessage() { return message; }
+}
+    </pre>
+
+    <h4>Step 4: Retrofit Interface (ApiService.java)</h4>
+    <pre>
+public interface ApiService {
+  @FormUrlEncoded
+  @POST("login.php")
+  Call&lt;LoginResponse&gt; loginUser(
+    @Field("username") String username,
+    @Field("password") String password
+  );
+}
+    </pre>
+
+    <h4>Step 5: Main Logic (MainActivity.java)</h4>
+    <pre>
+Retrofit retrofit = new Retrofit.Builder()
+  .baseUrl("http://yourserver.com/api/") // Replace with actual URL
+  .addConverterFactory(GsonConverterFactory.create())
+  .build();
+
+ApiService api = retrofit.create(ApiService.class);
+
+loginBtn.setOnClickListener(v -&gt; {
+  api.loginUser(username.getText().toString(), password.getText().toString())
+    .enqueue(new Callback&lt;LoginResponse&gt;() {
+      @Override
+      public void onResponse(Call&lt;LoginResponse&gt; call, Response&lt;LoginResponse&gt; response) {
+        resultText.setText(response.body().getMessage());
+      }
+
+      @Override
+      public void onFailure(Call&lt;LoginResponse&gt; call, Throwable t) {
+        resultText.setText("Error: " + t.getMessage());
+      }
+    });
+});
+    </pre>
+  </div>
+
+  <div class="section">
+    <h3>🔐 Optional: Security Enhancements</h3>
+    <ul>
+      <li>Use <code>password_hash()</code> and <code>password_verify()</code> in PHP.</li>
+      <li>Switch to HTTPS for secure data transmission.</li>
+      <li>Validate inputs on both client and server.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h3>🧠 Reflection Questions</h3>
+    <ol>
+      <li>What are the advantages of using Retrofit over HttpURLConnection?</li>
+      <li>How does PHP handle SQL injection in this example?</li>
+      <li>What improvements would you make to secure the login system?</li>
+    </ol>
+  </div>
+
+  <footer>
+    @SirLavz2025 | Ronald T. Lava, MSIT | College of Computing Studies | Laguna University
+  </footer>
+
+</body>
+</html>
